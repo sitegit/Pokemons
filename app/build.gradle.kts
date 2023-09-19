@@ -48,9 +48,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
-    //Timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
-
     //Lifecycle
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -62,7 +59,6 @@ dependencies {
 
     //Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    ksp("com.github.bumptech.glide:ksp:4.16.0")
 
     //Dagger 2
     implementation("com.google.dagger:dagger:2.47")
@@ -70,6 +66,9 @@ dependencies {
 
     //Palette
     implementation("androidx.palette:palette:1.0.0")
+
+    //Paging 3
+    implementation("androidx.paging:paging-runtime:3.2.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

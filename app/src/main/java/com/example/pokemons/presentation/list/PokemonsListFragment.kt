@@ -2,6 +2,7 @@ package com.example.pokemons.presentation.list
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.presentation.ViewModelFactory
@@ -61,7 +64,6 @@ class PokemonsListFragment : Fragment() {
     private fun observer() {
         viewModel.state.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
-
             when (it) {
                 is Error -> {
                     val error = it.message
@@ -75,8 +77,9 @@ class PokemonsListFragment : Fragment() {
                     binding.progressBar.visibility = View.VISIBLE
                 }
                 is Factorial -> {
+                    Log.i("MyTag", it.pokemons.toString())
+                    //viewModel.loadPokemonPaginated()
                     pokemonsAdapter.submitList(it.pokemons)
-                    viewModel.loadPokemonPaginated()
                 }
             }
         }
@@ -85,6 +88,20 @@ class PokemonsListFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = pokemonsAdapter
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    // Достигнут конец списка, загрузите следующую страницу данных
+                    viewModel.loadPokemonPaginated()
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {

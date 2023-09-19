@@ -1,13 +1,11 @@
 package com.example.pokemons.presentation.list
 
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
-import android.util.Log
+import com.example.pokemons.util.Constants.PAGE_SIZE
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokemons.data.PokemonListEntry
-import com.example.pokemons.data.model.PokemonsList
 import com.example.pokemons.domain.GetPokemonsListUseCase
 import com.example.pokemons.util.Error
 import com.example.pokemons.util.Factorial
@@ -29,18 +27,26 @@ class PokemonsListViewModel @Inject constructor(
     val state: LiveData<State>
         get() = _state
 
+    private val _endReached = MutableLiveData<Boolean>(false)
+    val endReached: LiveData<Boolean>
+        get() = _endReached
+
     init {
         loadPokemonPaginated()
     }
 
     fun loadPokemonPaginated() {
-        //_state.value = Progress
+        if (_endReached.value == true) {
+            // Если достигнут конец списка, не загружайте дополнительные данные
+            return
+        }
+        _state.value = Progress
         viewModelScope.launch {
             val result = getPokemonsListUseCase.invoke(PAGE_SIZE, curPage * PAGE_SIZE)
             when(result) {
                 is Resource.Success -> {
-                    //_endReached.value = curPage * PAGE_SIZE >= result.data!!.count
-                    val pokedexEntries = result.data?.results?.mapIndexed { index, entry ->
+                    _endReached.value = curPage * PAGE_SIZE >= result.data!!.count
+                    val pokedexEntries = result.data.results.mapIndexed { _, entry ->
                         val number = if(entry.url.endsWith("/")) {
                             entry.url.dropLast(1).takeLastWhile { it.isDigit() }
                         } else {
@@ -55,7 +61,7 @@ class PokemonsListViewModel @Inject constructor(
                     }
                     curPage++
 
-                     pokedexEntries?.let {
+                    pokedexEntries?.let {
                         _state.value = Factorial(it)
                     }
                 }

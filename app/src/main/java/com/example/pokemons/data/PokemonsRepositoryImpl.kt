@@ -12,6 +12,7 @@ import javax.inject.Inject
 class PokemonsRepositoryImpl @Inject constructor(
     private val apiService: PokeApiService
 ) : PokemonsRepository {
+
     override suspend fun getPokemonList(offset: Int, limit: Int): Resource<PokemonsList> {
         val response = try {
             apiService.getPokemonsList(offset, limit)

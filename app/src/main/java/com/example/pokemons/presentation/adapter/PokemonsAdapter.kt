@@ -15,8 +15,6 @@ import com.bumptech.glide.request.target.Target
 import com.example.pokemons.R
 import com.example.pokemons.data.PokemonListEntry
 import com.example.pokemons.databinding.PokemonItemBinding
-import timber.log.Timber
-
 
 class PokemonsAdapter : ListAdapter<PokemonListEntry, PokemonViewHolder>(PokemonDiffCallBack) {
 
@@ -50,7 +48,6 @@ class PokemonsAdapter : ListAdapter<PokemonListEntry, PokemonViewHolder>(Pokemon
                     target: Target<Bitmap>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    Timber.i("Error while loading picture $e")
                     return false
                 }
 
