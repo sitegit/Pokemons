@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
-import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.presentation.adapter.PokemonsAdapter
+import com.example.pokemons.util.Error
+import com.example.pokemons.util.Factorial
+import com.example.pokemons.util.Progress
 import javax.inject.Inject
 
 class PokemonsListFragment : Fragment() {
@@ -52,9 +54,31 @@ class PokemonsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
+        observer()
 
-        viewModel.pokemonsListLiveData.observe(viewLifecycleOwner) {
-            pokemonsAdapter.submitList(it)
+    }
+
+    private fun observer() {
+        viewModel.state.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.GONE
+
+            when (it) {
+                is Error -> {
+                    val error = it.message
+                    Toast.makeText(
+                        requireContext(),
+                        error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is Progress -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is Factorial -> {
+                    pokemonsAdapter.submitList(it.pokemons)
+                    viewModel.loadPokemonPaginated()
+                }
+            }
         }
     }
 

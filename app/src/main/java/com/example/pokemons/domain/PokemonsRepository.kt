@@ -1,6 +1,6 @@
 package com.example.pokemons.domain
 
-import androidx.lifecycle.LiveData
+
 import com.example.pokemons.data.model.Pokemon
 import com.example.pokemons.data.model.PokemonsList
 import com.example.pokemons.util.Resource
