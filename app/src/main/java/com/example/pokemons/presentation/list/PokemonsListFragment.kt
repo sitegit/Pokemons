@@ -53,7 +53,8 @@ class PokemonsListFragment : Fragment() {
 
         initRecyclerView()
 
-        viewModel.pokemonsListLiveData.observe(viewLifecycleOwner) {
+        viewModel.pokemonsList.observe(viewLifecycleOwner) {
+            viewModel.loadPokemonPaginated()
             pokemonsAdapter.submitList(it)
         }
     }

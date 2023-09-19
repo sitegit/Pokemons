@@ -1,6 +1,8 @@
 package com.example.pokemons.presentation.adapter
 
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.palette.graphics.Palette
@@ -36,11 +38,11 @@ class PokemonsAdapter : ListAdapter<PokemonListEntry, PokemonViewHolder>(Pokemon
     }
 
     private fun loadImage(holder: PokemonViewHolder, item: PokemonListEntry) {
-        val imageView = holder.binding.pokemonImageView // Замените imageView на ваш ID ImageView
+        val imageView = holder.binding.pokemonImageView
 
-        Glide.with(holder.itemView.context) // Используйте контекст из itemView для Glide
+        Glide.with(holder.itemView.context)
             .asBitmap()
-            .load(item.image) // Замените item.imageUrl на URL изображения из вашего объекта item
+            .load(item.image)
             .listener(object : RequestListener<Bitmap> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -59,15 +61,28 @@ class PokemonsAdapter : ListAdapter<PokemonListEntry, PokemonViewHolder>(Pokemon
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    val palette: Palette = Palette.from(resource).generate()
-                    val color = palette.dominantSwatch?.rgb ?: R.color.white
-                    holder.binding.pokemonCardView.setBackgroundColor(color)
+                    setColors(resource, holder)
                     return false
                 }
             })
-            .placeholder(R.drawable.baseline_image_24) // Опционально: изображение-заглушка, пока изображение загружается
-            .error(R.drawable.baseline_mood_bad_24) // Опционально: изображение-заглушка в случае ошибки загрузки
+            .placeholder(R.drawable.baseline_image_24)
+            .error(R.drawable.baseline_mood_bad_24)
             .into(imageView)
+    }
+
+    private fun setColors(resource: Bitmap, holder: PokemonViewHolder) {
+        val palette: Palette = Palette.from(resource).generate()
+        val color = palette.dominantSwatch?.rgb ?: R.color.black
+        val dominantSwatch = palette.dominantSwatch
+
+        if (dominantSwatch != null) {
+            val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(dominantSwatch.rgb, Color.WHITE)
+            )
+            holder.binding.pokemonCardView.background = gradientDrawable
+            holder.binding.pokemonTextView.setTextColor(color)
+        }
     }
 }
 
