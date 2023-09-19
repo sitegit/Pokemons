@@ -38,11 +38,11 @@ class PokemonsAdapter : ListAdapter<PokemonListEntry, PokemonViewHolder>(Pokemon
     }
 
     private fun loadImage(holder: PokemonViewHolder, item: PokemonListEntry) {
-        val imageView = holder.binding.pokemonImageView // Замените imageView на ваш ID ImageView
+        val imageView = holder.binding.pokemonImageView
 
-        Glide.with(holder.itemView.context) // Используйте контекст из itemView для Glide
+        Glide.with(holder.itemView.context)
             .asBitmap()
-            .load(item.image) // Замените item.imageUrl на URL изображения из вашего объекта item
+            .load(item.image)
             .listener(object : RequestListener<Bitmap> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -65,8 +65,8 @@ class PokemonsAdapter : ListAdapter<PokemonListEntry, PokemonViewHolder>(Pokemon
                     return false
                 }
             })
-            .placeholder(R.drawable.baseline_image_24) // Опционально: изображение-заглушка, пока изображение загружается
-            .error(R.drawable.baseline_mood_bad_24) // Опционально: изображение-заглушка в случае ошибки загрузки
+            .placeholder(R.drawable.baseline_image_24)
+            .error(R.drawable.baseline_mood_bad_24)
             .into(imageView)
     }
 
