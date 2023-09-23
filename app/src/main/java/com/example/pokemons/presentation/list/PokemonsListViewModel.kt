@@ -1,18 +1,16 @@
 package com.example.pokemons.presentation.list
 
-import com.example.pokemons.util.Constants.PAGE_SIZE
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.example.pokemons.data.PokemonListEntry
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
+import com.example.pokemons.data.remote.model.PokeEntry
 import com.example.pokemons.domain.GetPokemonsListUseCase
-import com.example.pokemons.util.Error
-import com.example.pokemons.util.Factorial
-import com.example.pokemons.util.Progress
-import com.example.pokemons.util.Resource
-import com.example.pokemons.util.State
-import kotlinx.coroutines.launch
+import com.example.pokemons.util.Constants.IMAGE_EXTENSION
+import com.example.pokemons.util.Constants.POKEMON_SPRITES_URL
 import java.util.Locale
 import javax.inject.Inject
 
@@ -20,57 +18,23 @@ class PokemonsListViewModel @Inject constructor(
     private val getPokemonsListUseCase: GetPokemonsListUseCase
 ) : ViewModel() {
 
-
-    private var curPage = 0
-
-    private val _state = MutableLiveData<State>()
-    val state: LiveData<State>
-        get() = _state
-
-    private val _endReached = MutableLiveData<Boolean>(false)
-    val endReached: LiveData<Boolean>
-        get() = _endReached
-
-    init {
-        loadPokemonPaginated()
-    }
-
-    fun loadPokemonPaginated() {
-        if (_endReached.value == true) {
-            // Если достигнут конец списка, не загружайте дополнительные данные
-            return
-        }
-        _state.value = Progress
-        viewModelScope.launch {
-            val result = getPokemonsListUseCase.invoke(PAGE_SIZE, curPage * PAGE_SIZE)
-            when(result) {
-                is Resource.Success -> {
-                    _endReached.value = curPage * PAGE_SIZE >= result.data!!.count
-                    val pokedexEntries = result.data.results.mapIndexed { _, entry ->
-                        val number = if(entry.url.endsWith("/")) {
-                            entry.url.dropLast(1).takeLastWhile { it.isDigit() }
-                        } else {
-                            entry.url.takeLastWhile { it.isDigit() }
-                        }
-                        val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                        PokemonListEntry(entry.name.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(
-                                Locale.ROOT
-                            ) else it.toString()
-                        }, url, number.toInt())
-                    }
-                    curPage++
-
-                    pokedexEntries?.let {
-                        _state.value = Factorial(it)
-                    }
+    val pokemons: LiveData<PagingData<PokeEntry>> = getPokemonsListUseCase.invoke()
+        .map { pagingData ->
+            pagingData.map { result ->
+                val number = if (result.url.endsWith("/")) {
+                    result.url.dropLast(1).takeLastWhile { it.isDigit() }
+                } else {
+                    result.url.takeLastWhile { it.isDigit() }
                 }
-                is Resource.Error -> {
-                    _state.value = Error(result.message!!)
-                }
+                val url = "$POKEMON_SPRITES_URL$number$IMAGE_EXTENSION"
+                PokeEntry(result.name.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                }, url, number.toInt())
             }
         }
-    }
-
+        .cachedIn(viewModelScope)
 }
+
+
+
 

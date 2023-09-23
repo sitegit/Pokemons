@@ -1,11 +1,12 @@
 package com.example.pokemons.domain
 
-import com.example.pokemons.data.model.PokemonsList
-import com.example.pokemons.util.Resource
+import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
+import com.example.pokemons.data.remote.model.Result
 import javax.inject.Inject
 
 class GetPokemonsListUseCase @Inject constructor(private val repository: PokemonsRepository) {
 
-    suspend operator fun invoke(offset: Int, limit: Int): Resource<PokemonsList> =
-        repository.getPokemonList(offset, limit)
+    operator fun invoke(): LiveData<PagingData<Result>> =
+        repository.getPokePagingSource()
 }

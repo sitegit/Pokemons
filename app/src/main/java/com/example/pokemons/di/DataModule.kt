@@ -1,8 +1,8 @@
 package com.example.pokemons.di
 
-import com.example.pokemons.data.PokeApiFactory
-import com.example.pokemons.data.PokeApiService
-import com.example.pokemons.data.PokemonsRepositoryImpl
+import com.example.pokemons.data.remote.api.PokeApiFactory
+import com.example.pokemons.data.remote.api.PokeApiService
+import com.example.pokemons.data.remote.PokemonsRepositoryImpl
 import com.example.pokemons.domain.PokemonsRepository
 import dagger.Binds
 import dagger.Module
@@ -13,7 +13,7 @@ interface DataModule {
 
     @Binds
     @ApplicationScope
-    fun bindCryptoAppRepository(impl: PokemonsRepositoryImpl): PokemonsRepository
+    fun bindPokeAppRepository(impl: PokemonsRepositoryImpl): PokemonsRepository
 
     companion object {
 

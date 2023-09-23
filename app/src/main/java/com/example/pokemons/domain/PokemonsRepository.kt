@@ -1,13 +1,15 @@
 package com.example.pokemons.domain
 
 
-import com.example.pokemons.data.model.Pokemon
-import com.example.pokemons.data.model.PokemonsList
+import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
+import com.example.pokemons.data.allmodel.Pokemon
+import com.example.pokemons.data.remote.model.Result
 import com.example.pokemons.util.Resource
 
 interface PokemonsRepository {
 
-    suspend fun getPokemonList(offset: Int, limit: Int): Resource<PokemonsList>
+    fun getPokePagingSource(): LiveData<PagingData<Result>>
 
     suspend fun getPokemonInfo(name: String): Resource<Pokemon>
 }

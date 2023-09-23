@@ -1,6 +1,6 @@
 package com.example.pokemons.domain
 
-import com.example.pokemons.data.model.Pokemon
+import com.example.pokemons.data.allmodel.Pokemon
 import com.example.pokemons.util.Resource
 import javax.inject.Inject
 
