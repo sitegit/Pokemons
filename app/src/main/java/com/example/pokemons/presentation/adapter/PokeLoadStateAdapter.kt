@@ -16,9 +16,9 @@ class PokeLoadStateAdapter(
         private val binding: ItemLoadingStateBinding,
         private val retry: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-
         // Привязка состояния загрузки к элементам интерфейса
         fun bind(loadState: LoadState) {
+
             if (loadState is LoadState.Error) {
                 binding.textViewError.text = loadState.error.localizedMessage
             }
@@ -48,8 +48,11 @@ class PokeLoadStateAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         loadState: LoadState
-    ) = PokeLoadStateViewHolder(
-        ItemLoadingStateBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-        retry
-    )
+    ): PokeLoadStateViewHolder {
+        return PokeLoadStateViewHolder(
+            ItemLoadingStateBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            retry
+        )
+    }
 }
+

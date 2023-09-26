@@ -1,12 +1,10 @@
 package com.example.pokemons.domain
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
-import com.example.pokemons.data.remote.model.Result
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetPokemonsListUseCase @Inject constructor(private val repository: PokemonsRepository) {
-
-    operator fun invoke(): LiveData<PagingData<Result>> =
+    operator fun invoke(): Flow<PagingData<PokeEntryEntity>> =
         repository.getPokePagingSource()
 }
