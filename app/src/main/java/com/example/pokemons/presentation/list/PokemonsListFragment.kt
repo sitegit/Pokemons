@@ -6,18 +6,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
+import com.example.pokemons.domain.PokeEntryEntity
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.presentation.adapter.PokeLoadStateAdapter
-import com.example.pokemons.presentation.adapter.rvlist.PokemonsAdapter
+import com.example.pokemons.presentation.adapter.PokemonAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +41,10 @@ class PokemonsListFragment : Fragment() {
     private val binding: FragmentPokemonsListBinding
         get() = _binding ?: throw RuntimeException("FragmentPokemonsListBinding == null")
 
-    private val pokemonsAdapter = PokemonsAdapter()
+    private val pokemonAdapter =
+        PokemonAdapter { pokemon: PokeEntryEntity, dominantColor: Int ->
+            navigateToDetail(pokemon, dominantColor)
+        }
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -59,6 +65,7 @@ class PokemonsListFragment : Fragment() {
         initRecyclerView()
         initSearchView()
         observer()
+        // Скрыть клавиатуру
 
     }
 
@@ -70,6 +77,8 @@ class PokemonsListFragment : Fragment() {
                 query?.let {
                     viewModel.searchPokemonList(it)
                 }
+
+                hideKeyboard()
                 return true
             }
 
@@ -78,11 +87,15 @@ class PokemonsListFragment : Fragment() {
                 newText?.let {
                     viewModel.searchPokemonList(it)
                 }
-                return true
+                return false
             }
-
-
         })
+    }
+
+    private fun hideKeyboard() {
+        binding.searchView.clearFocus()
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
     }
 
     private fun observer() {
@@ -91,7 +104,7 @@ class PokemonsListFragment : Fragment() {
                 launch {
                     viewModel.pokemons.collect { pagingData ->
                         Log.d("Observer", "Data collected: $pagingData")
-                        pokemonsAdapter.submitData(pagingData)
+                        pokemonAdapter.submitData(pagingData)
                     }
                 }
 
@@ -106,16 +119,23 @@ class PokemonsListFragment : Fragment() {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 // Если это элемент состояния загрузки, занимаем 2 колонки
-                return if (position == pokemonsAdapter.itemCount) 2 else 1
+                return if (position == pokemonAdapter.itemCount) 2 else 1
             }
         }
 
         binding.recyclerView.layoutManager = layoutManager
 
-        binding.recyclerView.adapter = pokemonsAdapter.withLoadStateFooter(
-            footer = PokeLoadStateAdapter { pokemonsAdapter.retry() }
+        binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
+            footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
         )
 
+    }
+
+    private fun navigateToDetail(pokemon: PokeEntryEntity, dominantColor: Int) {
+        findNavController().navigate(
+            PokemonsListFragmentDirections
+                .actionPokemonsListFragmentToPokemonDetailFragment(pokemon, dominantColor)
+        )
     }
 
     override fun onDestroyView() {

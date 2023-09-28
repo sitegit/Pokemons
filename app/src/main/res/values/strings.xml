@@ -4,4 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
     <string name="tap_to_retry">Tap to retry</string>
+    <string name="base_stats">Base Stats:</string>
+    <string name="prefix">#%1$s</string>
+    <string name="hp">Hp</string>
+    <string name="attack">Atk</string>
+    <string name="defense">Def</string>
+    <string name="special_attack">SpAtk</string>
+    <string name="spdef">SpDef</string>
+    <string name="spd">Spd</string>
 </resources>

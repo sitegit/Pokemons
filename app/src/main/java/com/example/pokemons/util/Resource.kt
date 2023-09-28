@@ -1,6 +1,6 @@
 package com.example.pokemons.util
 
-import com.example.pokemons.data.model.PokeEntryDbModel
+import com.example.pokemons.data.model.PokeEntryDb
 
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
@@ -14,4 +14,4 @@ sealed class State
 
 data class Error(val message: String) : State()
 data object Progress : State()
-data class Success(val pokemons: List<PokeEntryDbModel>) : State()
+data class Success(val pokemons: List<PokeEntryDb>) : State()

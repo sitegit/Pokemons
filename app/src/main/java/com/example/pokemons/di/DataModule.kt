@@ -3,9 +3,9 @@ package com.example.pokemons.di
 import android.app.Application
 import com.example.pokemons.data.PokemonsRepositoryImpl
 import com.example.pokemons.data.local.PokeDatabase
-import com.example.pokemons.data.local.PokeEntryDao
-import com.example.pokemons.data.remote.api.PokeApiFactory
-import com.example.pokemons.data.remote.api.PokeApiService
+import com.example.pokemons.data.local.PokeDao
+import com.example.pokemons.data.network.api.PokeApiFactory
+import com.example.pokemons.data.network.api.PokeApiService
 import com.example.pokemons.domain.PokemonsRepository
 import dagger.Binds
 import dagger.Module
@@ -21,7 +21,7 @@ interface DataModule {
     companion object {
         @Provides
         @ApplicationScope
-        fun providePokeEntryDao(application: Application): PokeEntryDao {
+        fun providePokeEntryDao(application: Application): PokeDao {
             return PokeDatabase.getInstance(application).pokeEntryDao()
         }
 

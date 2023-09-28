@@ -7,14 +7,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.pokemons.data.allmodel.Pokemon
-import com.example.pokemons.data.local.PokeEntryDao
+import com.example.pokemons.data.local.PokeDao
 import com.example.pokemons.data.mediator.PokeRemoteMediator
-import com.example.pokemons.data.remote.api.PokeApiService
+import com.example.pokemons.data.network.api.PokeApiService
 import com.example.pokemons.domain.PokeEntryEntity
+import com.example.pokemons.domain.PokeInfoEntity
 import com.example.pokemons.domain.PokemonsRepository
 import com.example.pokemons.util.Constants.PAGE_SIZE
-import com.example.pokemons.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import okio.IOException
@@ -23,7 +22,7 @@ import javax.inject.Inject
 
 class PokemonsRepositoryImpl @Inject constructor(
     private val apiService: PokeApiService,
-    private val dao: PokeEntryDao,
+    private val dao: PokeDao,
     private val mapper: Mapper
 ) : PokemonsRepository {
 
@@ -34,15 +33,14 @@ class PokemonsRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = true,
             ),
-            remoteMediator = PokeRemoteMediator(apiService, dao)
+            remoteMediator = PokeRemoteMediator(apiService, dao, mapper)
         ) {
             dao.getPokemons()
         }.flow.map { pagingData ->
-            pagingData.map { mapper.dBModelToEntity(it) }
+            pagingData.map { mapper.dBEntryToEntryEntity(it) }
         }
     }
 
-    @OptIn(ExperimentalPagingApi::class)
     override fun searchPokemonByName(query: String): Flow<PagingData<PokeEntryEntity>> {
         // добавьте символы % вокруг запроса для поиска, чтобы использовать SQL оператор LIKE
         val adjustedQuery = "%${query.trim()}%"
@@ -55,19 +53,22 @@ class PokemonsRepositoryImpl @Inject constructor(
         ) {
             dao.searchPokemons(adjustedQuery)
         }.flow.map { pagingData ->
-            pagingData.map { mapper.dBModelToEntity(it) }
+            pagingData.map { mapper.dBEntryToEntryEntity(it) }
         }
     }
 
 
-    override suspend fun getPokemonInfo(name: String): Resource<Pokemon> {
-        val response = try {
+    override suspend fun getPokemonInfo(name: String): PokeInfoEntity {
+
+        return mapper.dbInfoToInfoEntity(dao.getPokemon(name.lowercase()))
+        //return mapper.dBModelToInfoEntity(dao.getPokemon(name))
+        /*val response = try {
             apiService.getPokemonInfo(name)
         } catch (e: Exception) {
             val errorMessage = getError(e)
             return Resource.Error(errorMessage)
         }
-        return Resource.Success(response)
+        return Resource.Success(response)*/
     }
 
     private fun getError(e: Exception): String {

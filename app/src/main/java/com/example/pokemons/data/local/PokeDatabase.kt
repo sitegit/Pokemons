@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.pokemons.data.model.PokeEntryDbModel
+import androidx.room.TypeConverters
+import com.example.pokemons.data.model.PokeEntryDb
+import com.example.pokemons.data.model.PokeInfoDb
 
-@Database(entities = [PokeEntryDbModel::class], version = 17, exportSchema = false)
+@Database(entities = [PokeEntryDb::class, PokeInfoDb::class], version = 26, exportSchema = false)
+@TypeConverters(PokeTypeConverter::class)
 abstract class PokeDatabase : RoomDatabase() {
     companion object {
 
@@ -31,5 +34,5 @@ abstract class PokeDatabase : RoomDatabase() {
         }
     }
 
-    abstract fun pokeEntryDao(): PokeEntryDao
+    abstract fun pokeEntryDao(): PokeDao
 }

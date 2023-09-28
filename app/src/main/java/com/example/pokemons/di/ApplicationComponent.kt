@@ -2,6 +2,7 @@ package com.example.pokemons.di
 
 import android.app.Application
 import com.example.pokemons.PokemonsApplication
+import com.example.pokemons.presentation.detail.PokemonDetailFragment
 import com.example.pokemons.presentation.list.PokemonsListFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -11,6 +12,8 @@ import dagger.Component
 interface ApplicationComponent {
 
     fun inject(pokemonsListFragment: PokemonsListFragment)
+
+    fun inject(pokemonDetailFragment: PokemonDetailFragment)
 
     fun inject(app: PokemonsApplication)
 
