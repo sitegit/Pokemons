@@ -1,0 +1,125 @@
+<!-- res/layout/progress_layout.xml -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_hp"
+        style="@style/ProgressBarStatStyle"
+        app:indicatorColor="@color/yellow"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar_atk" />
+
+    <TextView
+        android:id="@+id/tv_hp"
+        style="@style/TextViewLabelStyle"
+        android:text="@string/hp"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar_hp"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_hp"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_hp" />
+
+    <TextView
+        android:id="@+id/tv_counter_hp"
+        style="@style/BaseTextView"
+        app:layout_constraintBottom_toBottomOf="@id/progress_bar_hp"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_hp" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_atk"
+        style="@style/ProgressBarStatStyle"
+        app:indicatorColor="@color/red"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar_def" />
+
+    <TextView
+        android:id="@+id/tv_atk"
+        style="@style/TextViewLabelStyle"
+        android:text="@string/attack"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar_atk"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_atk"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_atk" />
+
+    <TextView
+        android:id="@+id/tv_counter_atk"
+        style="@style/BaseTextView"
+        app:layout_constraintBottom_toBottomOf="@id/progress_bar_atk"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_atk" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_def"
+        style="@style/ProgressBarStatStyle"
+        app:indicatorColor="@color/blue"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar_sp_atk" />
+
+    <TextView
+        android:id="@+id/tv_def"
+        style="@style/TextViewLabelStyle"
+        android:text="@string/defense"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar_def"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_def"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_def" />
+
+    <TextView
+        android:id="@+id/tv_counter_def"
+        style="@style/BaseTextView"
+        app:layout_constraintBottom_toBottomOf="@id/progress_bar_def"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_def" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_sp_atk"
+        style="@style/ProgressBarStatStyle"
+        app:indicatorColor="@color/purple_500"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar_sp_def" />
+
+    <TextView
+        android:id="@+id/tv_sp_atk"
+        style="@style/TextViewLabelStyle"
+        android:text="@string/special_attack"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar_sp_atk"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_sp_atk"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_sp_atk" />
+
+    <TextView
+        android:id="@+id/tv_counter_sp_atk"
+        style="@style/BaseTextView"
+        app:layout_constraintBottom_toBottomOf="@id/progress_bar_sp_atk"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_sp_atk" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_sp_def"
+        style="@style/ProgressBarStatStyle"
+        app:indicatorColor="@color/purple_200"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar_spd" />
+
+    <TextView
+        android:id="@+id/tv_sp_def"
+        style="@style/TextViewLabelStyle"
+        android:text="@string/spdef"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar_sp_def"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_sp_def"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_sp_def" />
+
+    <TextView
+        android:id="@+id/tv_counter_sp_def"
+        style="@style/BaseTextView"
+        app:layout_constraintBottom_toBottomOf="@id/progress_bar_sp_def"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_sp_def" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar_spd"
+        app:indicatorColor="@color/green"
+        android:layout_marginBottom="30dp"
+        style="@style/ProgressBarStatStyle"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_spd"
+        style="@style/TextViewLabelStyle"
+        android:text="@string/spd"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar_spd"
+        app:layout_constraintStart_toStartOf="@id/progress_bar_spd"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_spd" />
+
+    <TextView
+        android:id="@+id/tv_counter_spd"
+        style="@style/BaseTextView"
+        app:layout_constraintBottom_toBottomOf="@id/progress_bar_spd"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_spd" />
+</merge>

@@ -1,23 +1,34 @@
 package com.example.pokemons.presentation.detail
 
+import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonDetailBinding
+import com.example.pokemons.databinding.PokemonStatsBinding
+import com.example.pokemons.domain.PokeInfoEntity
 import com.example.pokemons.presentation.ViewModelFactory
+import com.example.pokemons.util.replaceFirstChar
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class PokemonDetailFragment : Fragment() {
     @Inject
@@ -35,6 +46,10 @@ class PokemonDetailFragment : Fragment() {
     private val binding: FragmentPokemonDetailBinding
         get() = _binding ?: throw RuntimeException("FragmentPokemonDetailBinding == null")
 
+    private var _statsBinding: PokemonStatsBinding? = null
+    private val statsBinding: PokemonStatsBinding
+        get() = _statsBinding ?: throw RuntimeException("PokemonStatsBinding == null")
+
     private val args by navArgs<PokemonDetailFragmentArgs>()
 
     override fun onAttach(context: Context) {
@@ -47,42 +62,146 @@ class PokemonDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPokemonDetailBinding.inflate(inflater, container, false)
+        _statsBinding = PokemonStatsBinding.bind(binding.root)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        displayTextInfo()
         setDominantColors(args.dominantColor)
+        Glide.with(view).load(args.pokemon.url).into(binding.ivPokemonImg)
 
+        binding.buttonBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun displayTextInfo() {
         viewModel.viewModelScope.launch(Dispatchers.Main) {
             with(binding) {
                 val pokemon = viewModel.getPokemonInfo(args.pokemon.name)
-                Glide.with(view).load(args.pokemon.url).into(ivPokemonImg)
+                val drawable = getDrawableTv(args.dominantColor)
                 tvPokemonNumber.text = getString(R.string.prefix, args.pokemon.number.toString())
                 tvPokemonName.text = pokemon.name
                 tvHeight.text = pokemon.height.toString()
                 tvWeight.text = pokemon.weight.toString()
 
                 if (pokemon.types.size == 1) {
-                    tvTypeCenter.text = pokemon.types[0].type.name
+                    tvTypeCenter.text = pokemon.types[0].type.name.replaceFirstChar()
+                    tvTypeCenter.visibility = View.VISIBLE
+                    tvTypeCenter.background = drawable
                 }
                 else {
-                    tvTypeLeft.text = pokemon.types[0].type.name
-                    tvTypeRight.text = pokemon.types[1].type.name
+                    tvTypeLeft.text = pokemon.types[0].type.name.replaceFirstChar()
+                    tvTypeRight.text = pokemon.types[1].type.name.replaceFirstChar()
+                    tvTypeLeft.visibility = View.VISIBLE
+                    tvTypeRight.visibility = View.VISIBLE
+                    tvTypeLeft.background = drawable
+                    tvTypeRight.background = drawable
                 }
 
-                tvHp.text = pokemon.stats[0].baseStat.toString()
-                tvAttack.text = pokemon.stats[1].baseStat.toString()
-                tvDefense.text = pokemon.stats[2].baseStat.toString()
-                tvSpecialAttack.text = pokemon.stats[3].baseStat.toString()
-                tvSpecialDefense.text = pokemon.stats[4].baseStat.toString()
-                tvSpeed.text = pokemon.stats[5].baseStat.toString()
+                getStat(pokemon)
             }
 
         }
-
     }
+
+    private fun getDrawableTv(color: Int): Drawable {
+        val drawable = GradientDrawable()
+        drawable.shape = GradientDrawable.RECTANGLE
+        drawable.cornerRadius = 50f
+        drawable.setColor(color)
+        return drawable
+    }
+
+    private fun getStat(pokemon: PokeInfoEntity) {
+        val maxStat = pokemon.stats.maxBy { it.baseStat }.baseStat
+        setMaxProgress(maxStat)
+
+        setStat(
+            progressBar = statsBinding.progressBarHp,
+            counter = statsBinding.tvCounterHp,
+            specs = pokemon.stats[0].baseStat
+        )
+        setStat(
+            progressBar = statsBinding.progressBarAtk,
+            counter = statsBinding.tvCounterAtk,
+            specs = pokemon.stats[1].baseStat
+        )
+        setStat(
+            progressBar = statsBinding.progressBarDef,
+            counter = statsBinding.tvCounterDef,
+            specs = pokemon.stats[2].baseStat
+        )
+        setStat(
+            progressBar = statsBinding.progressBarSpAtk,
+            counter = statsBinding.tvCounterSpAtk,
+            specs = pokemon.stats[3].baseStat
+        )
+        setStat(
+            progressBar = statsBinding.progressBarSpDef,
+            counter = statsBinding.tvCounterSpDef,
+            specs = pokemon.stats[4].baseStat
+        )
+        setStat(
+            progressBar = statsBinding.progressBarSpd,
+            counter = statsBinding.tvCounterSpd,
+            specs = pokemon.stats[5].baseStat
+        )
+    }
+
+    private fun setMaxProgress(max: Int) {
+        statsBinding.progressBarHp.max = max
+        statsBinding.progressBarAtk.max = max
+        statsBinding.progressBarDef.max = max
+        statsBinding.progressBarSpAtk.max = max
+        statsBinding.progressBarSpDef.max = max
+        statsBinding.progressBarSpd.max = max
+    }
+    private fun setStat(progressBar: LinearProgressIndicator, counter: TextView, specs: Int) {
+        setCounterPosition(0, progressBar, counter)
+
+        statsBinding.progressBarSpd.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            setCounterPosition(progressBar.progress, progressBar, counter)
+        }
+
+        animateProgress(0, specs, progressBar, counter)
+    }
+
+    private fun animateProgress(start: Int, end: Int, progressBar: LinearProgressIndicator, counter: TextView) {
+        ValueAnimator.ofInt(start, end).apply {
+            duration = 700
+            interpolator = AccelerateInterpolator()
+            addUpdateListener { animation ->
+                val progressValue = animation.animatedValue as Int
+                progressBar.progress = progressValue
+                counter.text = progressValue.toString()
+
+                setCounterPosition(progressValue, progressBar, counter)
+            }
+            start()
+        }
+    }
+
+
+    private fun setCounterPosition(progress: Int, progressBar: LinearProgressIndicator, counter: TextView) {
+        val progressRatio = progress.toFloat() / progressBar.max
+        val progressBarWidth = progressBar.width - progressBar.paddingStart - progressBar.paddingEnd
+        counter.visibility = View.VISIBLE
+
+        if (progressBarWidth * progressRatio > 215) {
+            if (progressBar.progress < 99) {
+                counter.x = progressBarWidth * progressRatio - counter.width
+            } else {
+                counter.x = progressBarWidth * progressRatio - 92
+            }
+        } else {
+            counter.visibility = View.GONE
+        }
+    }
+
 
     private fun setDominantColors(dominantColor: Int) {
         val window = activity?.window
@@ -99,5 +218,6 @@ class PokemonDetailFragment : Fragment() {
         super.onDestroyView()
         setDefaultColorStatusBar()
         _binding = null
+        _statsBinding = null
     }
 }

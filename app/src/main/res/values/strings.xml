@@ -12,4 +12,7 @@
     <string name="special_attack">SpAtk</string>
     <string name="spdef">SpDef</string>
     <string name="spd">Spd</string>
+    <string name="back">back</string>
+    <string name="weight">weight</string>
+    <string name="height">Height</string>
 </resources>

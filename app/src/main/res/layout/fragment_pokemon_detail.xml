@@ -23,21 +23,20 @@
         style="@style/ConstraintCardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
         android:paddingStart="10dp"
         android:paddingTop="100dp"
         android:paddingEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/tv_pokemon_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:layout_marginBottom="50dp"
-            android:textSize="25sp"
-            android:textStyle="bold"
+            android:layout_marginBottom="60dp"
+            style="@style/TextViewPokemonDetailTitle"
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pokemon_number"
@@ -45,11 +44,8 @@
 
         <TextView
             android:id="@+id/tv_pokemon_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
-            android:textSize="25sp"
-            android:textStyle="bold"
+            style="@style/TextViewPokemonDetailTitle"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_name"
             app:layout_constraintEnd_toStartOf="@+id/tv_pokemon_name"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -58,10 +54,10 @@
 
         <TextView
             android:id="@+id/tv_type_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextViewPokemonTypeLabel"
             android:layout_marginBottom="10dp"
-            android:textSize="20sp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,23 +65,23 @@
 
         <TextView
             android:id="@+id/tv_type_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextViewPokemonTypeLabel"
+            android:layout_marginEnd="30dp"
             android:layout_marginStart="10dp"
-            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/line"
             app:layout_constraintTop_toTopOf="@+id/tv_type_left"
             tools:text="type 2" />
 
         <TextView
             android:id="@+id/tv_type_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/line"
-            app:layout_constraintBottom_toTopOf="@+id/line"
+            style="@style/TextViewPokemonTypeLabel"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/line"
+            app:layout_constraintEnd_toStartOf="@+id/line"
+            app:layout_constraintStart_toStartOf="parent"
             tools:text="type 1" />
 
         <View
@@ -105,131 +101,13 @@
             android:layout_marginBottom="12dp"
             android:text="@string/base_stats"
             android:textSize="20sp"
+            android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tv_hp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_hp_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_attack"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/hp" />
-
-        <TextView
-            android:id="@+id/tv_hp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="3dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_attack"
-            app:layout_constraintStart_toEndOf="@+id/tv_hp_label" />
-
-        <TextView
-            android:id="@+id/tv_attack_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_defense"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/attack" />
-
-        <TextView
-            android:id="@+id/tv_attack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_defense"
-            app:layout_constraintStart_toEndOf="@+id/tv_attack_label" />
-
-        <TextView
-            android:id="@+id/tv_defense_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_special_attack"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/defense" />
-
-        <TextView
-            android:id="@+id/tv_defense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_special_attack"
-            app:layout_constraintStart_toEndOf="@+id/tv_defense_label" />
-
-        <TextView
-            android:id="@+id/tv_special_attack_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_special_defense"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/special_attack" />
-
-        <TextView
-            android:id="@+id/tv_special_attack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_special_defense"
-            app:layout_constraintStart_toEndOf="@+id/tv_special_attack_label" />
-
-        <TextView
-            android:id="@+id/tv_special_defense_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_speed"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/spdef" />
-
-        <TextView
-            android:id="@+id/tv_special_defense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_speed"
-            app:layout_constraintStart_toEndOf="@+id/tv_special_defense_label" />
-
-        <TextView
-            android:id="@+id/tv_speed_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/spd"/>
-
-        <TextView
-            android:id="@+id/tv_speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginBottom="50dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_speed_label" />
 
         <ImageView
             android:id="@+id/iv_weight"
@@ -241,13 +119,15 @@
             app:layout_constraintEnd_toStartOf="@+id/line"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/line"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            android:contentDescription="@string/weight" />
 
         <TextView
             android:id="@+id/tv_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/line"
             app:layout_constraintEnd_toStartOf="@+id/line"
             app:layout_constraintStart_toStartOf="parent"
@@ -264,19 +144,43 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/line"
             app:layout_constraintTop_toTopOf="@+id/line"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            android:contentDescription="@string/height" />
 
         <TextView
             android:id="@+id/tv_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/line"
             app:layout_constraintTop_toBottomOf="@+id/iv_height"
             tools:text="2.0 m" />
+
+        <include
+            layout="@layout/pokemon_stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/back"
+        android:src="@drawable/ic_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
