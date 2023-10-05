@@ -65,7 +65,7 @@ class PokemonsListFragment : Fragment() {
         initRecyclerView()
         initSearchView()
         observer()
-        // Скрыть клавиатуру
+
 
     }
 
@@ -107,8 +107,6 @@ class PokemonsListFragment : Fragment() {
                         pokemonAdapter.submitData(pagingData)
                     }
                 }
-
-
             }
         }
     }
@@ -143,42 +141,3 @@ class PokemonsListFragment : Fragment() {
         _binding = null
     }
 }
-
-// Слушатель состояния загрузки
-/*// Добавляем слушатель на состояния загрузки
-                launch {
-                    pokemonsAdapter.loadStateFlow.collectLatest { loadStates ->
-                        // Логируем состояние обновления
-                        when (loadStates.refresh) {
-                            is LoadState.Loading -> Log.d("LoadState", "Обновление: Загрузка")
-                            is LoadState.NotLoading -> Log.d("LoadState", "Обновление: Загрузка завершена")
-                            is LoadState.Error -> Log.d("LoadState", "Обновление: Ошибка ${(loadStates.refresh as LoadState.Error).error.message}")
-                        }
-
-                        // Логируем состояние предзагрузки
-                        when (loadStates.prepend) {
-                            is LoadState.Loading -> Log.d("LoadState", "Предзагрузка: Загрузка")
-                            is LoadState.NotLoading -> Log.d("LoadState", "Предзагрузка: Загрузка завершена")
-                            is LoadState.Error -> Log.d("LoadState", "Предзагрузка: Ошибка ${(loadStates.prepend as LoadState.Error).error.message}")
-                        }
-
-                        // Логируем состояние добавления
-                        when (loadStates.append) {
-                            is LoadState.Loading -> Log.d("LoadState", "Добавление: Загрузка")
-                            is LoadState.NotLoading -> {
-                                Log.d("LoadState", "Добавление: Загрузка завершена")
-                                if (loadStates.append.endOfPaginationReached) {
-                                    Log.d("LoadState", "Добавление: Конец пагинации достигнут")
-                                }
-                            }
-                            is LoadState.Error -> Log.d("LoadState", "Добавление: Ошибка ${(loadStates.append as LoadState.Error).error.message}")
-                        }
-
-                        if (loadStates.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached) {
-                            // Загрузка завершена
-                            Log.d("LoadState", "Общее состояние: Загрузка завершена и конец пагинации достигнут")
-
-                        }
-                    }
-                }*/
-

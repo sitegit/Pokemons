@@ -10,6 +10,6 @@ class PokemonDetailViewModel @Inject constructor(
 ): ViewModel() {
 
     suspend fun getPokemonInfo(name: String): PokeInfoEntity {
-       return getPokemonInfoUseCase.invoke(name)
+        return getPokemonInfoUseCase.invoke(name)
     }
 }

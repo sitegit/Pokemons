@@ -1,14 +1,12 @@
-package com.example.pokemons.data.mediator
+package com.example.pokemons.data
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.example.pokemons.data.Mapper
 import com.example.pokemons.data.local.PokeDao
 import com.example.pokemons.data.model.PokeEntryDb
-import com.example.pokemons.data.network.api.PokeApiService
+import com.example.pokemons.data.network.PokeApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -60,7 +58,6 @@ class PokeRemoteMediator @Inject constructor(
                     endOfPaginationReached = pokeEntries.size < limit
                 )
             } catch (e: Exception) {
-                Log.i("MyTag", e.toString())
                 MediatorResult.Error(e)
             }
         }

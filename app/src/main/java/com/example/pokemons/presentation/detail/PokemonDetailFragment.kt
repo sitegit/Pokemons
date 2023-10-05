@@ -22,7 +22,11 @@ import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonDetailBinding
 import com.example.pokemons.databinding.PokemonStatsBinding
 import com.example.pokemons.domain.PokeInfoEntity
+import com.example.pokemons.presentation.StatWrapper
 import com.example.pokemons.presentation.ViewModelFactory
+import com.example.pokemons.util.Constants.COUNTER_OFFSET
+import com.example.pokemons.util.Constants.COUNTER_SMALL_PROGRESS_OFFSET
+import com.example.pokemons.util.Constants.COUNTER_THRESHOLD
 import com.example.pokemons.util.replaceFirstChar
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.Dispatchers
@@ -118,49 +122,25 @@ class PokemonDetailFragment : Fragment() {
 
     private fun getStat(pokemon: PokeInfoEntity) {
         val maxStat = pokemon.stats.maxBy { it.baseStat }.baseStat
-        setMaxProgress(maxStat)
 
-        setStat(
-            progressBar = statsBinding.progressBarHp,
-            counter = statsBinding.tvCounterHp,
-            specs = pokemon.stats[0].baseStat
+        val wrappers = listOf(
+            StatWrapper(statsBinding.progressBarHp, statsBinding.tvCounterHp),
+            StatWrapper(statsBinding.progressBarAtk, statsBinding.tvCounterAtk),
+            StatWrapper(statsBinding.progressBarDef, statsBinding.tvCounterDef),
+            StatWrapper(statsBinding.progressBarSpAtk, statsBinding.tvCounterSpAtk),
+            StatWrapper(statsBinding.progressBarSpDef, statsBinding.tvCounterSpDef),
+            StatWrapper(statsBinding.progressBarSpd, statsBinding.tvCounterSpd)
         )
-        setStat(
-            progressBar = statsBinding.progressBarAtk,
-            counter = statsBinding.tvCounterAtk,
-            specs = pokemon.stats[1].baseStat
-        )
-        setStat(
-            progressBar = statsBinding.progressBarDef,
-            counter = statsBinding.tvCounterDef,
-            specs = pokemon.stats[2].baseStat
-        )
-        setStat(
-            progressBar = statsBinding.progressBarSpAtk,
-            counter = statsBinding.tvCounterSpAtk,
-            specs = pokemon.stats[3].baseStat
-        )
-        setStat(
-            progressBar = statsBinding.progressBarSpDef,
-            counter = statsBinding.tvCounterSpDef,
-            specs = pokemon.stats[4].baseStat
-        )
-        setStat(
-            progressBar = statsBinding.progressBarSpd,
-            counter = statsBinding.tvCounterSpd,
-            specs = pokemon.stats[5].baseStat
-        )
+
+        wrappers.forEachIndexed { index, wrapper ->
+            if (index < pokemon.stats.size) {
+                wrapper.progressBar.max = maxStat
+                setProgress(wrapper.progressBar, wrapper.counter, pokemon.stats[index].baseStat)
+            }
+        }
     }
 
-    private fun setMaxProgress(max: Int) {
-        statsBinding.progressBarHp.max = max
-        statsBinding.progressBarAtk.max = max
-        statsBinding.progressBarDef.max = max
-        statsBinding.progressBarSpAtk.max = max
-        statsBinding.progressBarSpDef.max = max
-        statsBinding.progressBarSpd.max = max
-    }
-    private fun setStat(progressBar: LinearProgressIndicator, counter: TextView, specs: Int) {
+    private fun setProgress(progressBar: LinearProgressIndicator, counter: TextView, specs: Int) {
         setCounterPosition(0, progressBar, counter)
 
         statsBinding.progressBarSpd.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
@@ -185,23 +165,21 @@ class PokemonDetailFragment : Fragment() {
         }
     }
 
-
     private fun setCounterPosition(progress: Int, progressBar: LinearProgressIndicator, counter: TextView) {
         val progressRatio = progress.toFloat() / progressBar.max
         val progressBarWidth = progressBar.width - progressBar.paddingStart - progressBar.paddingEnd
         counter.visibility = View.VISIBLE
 
-        if (progressBarWidth * progressRatio > 215) {
-            if (progressBar.progress < 99) {
+        if (progressBarWidth * progressRatio > COUNTER_THRESHOLD) {
+            if (progressBar.progress < COUNTER_SMALL_PROGRESS_OFFSET) {
                 counter.x = progressBarWidth * progressRatio - counter.width
             } else {
-                counter.x = progressBarWidth * progressRatio - 92
+                counter.x = progressBarWidth * progressRatio - COUNTER_OFFSET
             }
         } else {
             counter.visibility = View.GONE
         }
     }
-
 
     private fun setDominantColors(dominantColor: Int) {
         val window = activity?.window

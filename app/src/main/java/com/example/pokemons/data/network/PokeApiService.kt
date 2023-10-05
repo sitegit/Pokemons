@@ -1,4 +1,4 @@
-package com.example.pokemons.data.network.api
+package com.example.pokemons.data.network
 
 import com.example.pokemons.data.model.PokeInfoDto
 import com.example.pokemons.data.model.PokemonsList
