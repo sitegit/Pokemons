@@ -1,4 +1,4 @@
-package com.example.pokemons.presentation
+package com.example.pokemons.presentation.detail
 
 import android.widget.TextView
 import com.google.android.material.progressindicator.LinearProgressIndicator

@@ -22,7 +22,6 @@ import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonDetailBinding
 import com.example.pokemons.databinding.PokemonStatsBinding
 import com.example.pokemons.domain.PokeInfoEntity
-import com.example.pokemons.presentation.StatWrapper
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.util.Constants.COUNTER_OFFSET
 import com.example.pokemons.util.Constants.COUNTER_SMALL_PROGRESS_OFFSET

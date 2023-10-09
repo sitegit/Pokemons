@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
+// Ваш ViewModel
 class PokemonsListViewModel @Inject constructor(
     private val getPokemonsListUseCase: GetPokemonsListUseCase,
     private val searchPokemonUseCase: SearchPokemonUseCase

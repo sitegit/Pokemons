@@ -17,10 +17,12 @@ import javax.inject.Inject
 class PokeRemoteMediator @Inject constructor(
     private val apiService: PokeApiService,
     private val pokeDao: PokeDao,
-    private val mapper: Mapper
+    private val mapper: Mapper,
+    private val query: String? = null
 ) : RemoteMediator<Int, PokeEntryDb>() {
 
     private var pageIndex = 0
+    private val tempList = mutableListOf<PokeEntryDb>()
 
     override suspend fun load(
         loadType: LoadType,
@@ -36,21 +38,23 @@ class PokeRemoteMediator @Inject constructor(
 
         return withContext(Dispatchers.IO) {
             try {
+
                 val response = apiService.getPokemonsList(offset, limit)
+
                 val pokeEntries = mapper.pokeListToPokeListEntryDb(response)
 
-                if (loadType == LoadType.REFRESH) {
-                    pokeDao.refresh(pokeEntries)
-                }
+                if (loadType == LoadType.REFRESH) { pokeDao.refresh(pokeEntries) }
 
-                val detailedInfoJobs = pokeEntries.map { poke ->
-                    async {
-                        val pokemon = apiService.getPokemonInfo(poke.name.lowercase())
-                        mapper.dtoInfoToInfoDb(pokemon)
+                if (query.isNullOrBlank()) {
+                    val detailedInfoJobs = pokeEntries.map { poke ->
+                        async {
+                            val pokemon = apiService.getPokemonInfo(poke.name.lowercase())
+                            mapper.dtoInfoToInfoDb(pokemon)
+                        }
                     }
+                    val detailedInfos = detailedInfoJobs.awaitAll()
+                    pokeDao.insertAllInfo(detailedInfos)
                 }
-                val detailedInfos = detailedInfoJobs.awaitAll()
-                pokeDao.insertAllInfo(detailedInfos)
 
                 pokeDao.insertAll(pokeEntries)
 

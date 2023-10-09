@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 class GetPokemonsListUseCase @Inject constructor(private val repository: PokemonsRepository) {
     operator fun invoke(): Flow<PagingData<PokeEntryEntity>> =
-        repository.getPokePagingSource()
+        repository.getPokemonList()
 }

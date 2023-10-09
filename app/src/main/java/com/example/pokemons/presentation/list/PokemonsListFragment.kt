@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
@@ -46,6 +48,9 @@ class PokemonsListFragment : Fragment() {
             navigateToDetail(pokemon, dominantColor)
         }
 
+    private var isSearching = false
+    private var isEndOfPaginationNow = false
+
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
@@ -65,30 +70,29 @@ class PokemonsListFragment : Fragment() {
         initRecyclerView()
         initSearchView()
         observer()
-
-
     }
 
     private fun initSearchView() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Обрабатывать поисковый запрос, когда пользователь отправляет его
-                query?.let {
-                    viewModel.searchPokemonList(it)
-                }
-
+                query?.let { viewModel.searchPokemonList(it) }
                 hideKeyboard()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Обрабатывать поисковый запрос по мере его ввода пользователем
-                newText?.let {
-                    viewModel.searchPokemonList(it)
+                newText?.let { viewModel.searchPokemonList(it) }
+
+                if (newText.isNullOrBlank()) {
+                    binding.progressBarSpd.visibility = View.GONE
+                    isSearching = false
+                    isEndOfPaginationNow = false
+                    updateAdapter()
                 }
-                return false
+                return true
             }
+
         })
     }
 
@@ -103,14 +107,12 @@ class PokemonsListFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 launch {
                     viewModel.pokemons.collect { pagingData ->
-                        Log.d("Observer", "Data collected: $pagingData")
                         pokemonAdapter.submitData(pagingData)
                     }
                 }
             }
         }
     }
-
 
     private fun initRecyclerView() {
         val layoutManager = GridLayoutManager(requireContext(), 2)
@@ -122,11 +124,51 @@ class PokemonsListFragment : Fragment() {
         }
 
         binding.recyclerView.layoutManager = layoutManager
+        updateAdapter()
 
-        binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
-            footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
-        )
+        val closeBtn = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        closeBtn.setOnClickListener {
+            binding.searchView.setQuery("", false)
+            isEndOfPaginationNow = true
+            hideKeyboard()
+        }
+        adapterLoadStateListener()
+    }
 
+    private fun updateAdapter() {
+        if (isSearching) {
+            binding.recyclerView.adapter = pokemonAdapter
+        } else {
+            binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
+                footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
+            )
+        }
+    }
+
+    private fun adapterLoadStateListener() {
+
+        pokemonAdapter.addLoadStateListener { loadState ->
+            val isLoadingNow = loadState.refresh is LoadState.Loading
+            if (isLoadingNow && loadState.append is LoadState.Loading && !isEndOfPaginationNow) {
+                binding.progressBarSpd.visibility = View.VISIBLE
+                isSearching = true
+                Log.i("MyTag", "isLoadingNow && loadState.append is LoadState.Loading")
+                updateAdapter()
+            }
+
+            if (loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached) {
+                Log.i("MyTag", "loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached")
+                isEndOfPaginationNow = true
+            }
+
+            if (isEndOfPaginationNow) {
+                Log.i("MyTag", "isEndOfPaginationNow")
+                binding.progressBarSpd.visibility = View.GONE
+                isSearching = false
+                isEndOfPaginationNow = false
+                updateAdapter()
+            }
+        }
     }
 
     private fun navigateToDetail(pokemon: PokeEntryEntity, dominantColor: Int) {
