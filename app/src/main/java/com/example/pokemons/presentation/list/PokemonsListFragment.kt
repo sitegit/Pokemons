@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
+import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.domain.PokeEntryEntity
 import com.example.pokemons.presentation.ViewModelFactory
@@ -49,7 +51,6 @@ class PokemonsListFragment : Fragment() {
         }
 
     private var isSearching = false
-    private var isEndOfPaginationNow = false
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -69,37 +70,9 @@ class PokemonsListFragment : Fragment() {
 
         initRecyclerView()
         initSearchView()
+        adapterLoadStateListener()
+        closeSearchBtnListener()
         observer()
-    }
-
-    private fun initSearchView() {
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.searchPokemonList(it) }
-                hideKeyboard()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { viewModel.searchPokemonList(it) }
-
-                if (newText.isNullOrBlank()) {
-                    binding.progressBarSpd.visibility = View.GONE
-                    isSearching = false
-                    isEndOfPaginationNow = false
-                    updateAdapter()
-                }
-                return true
-            }
-
-        })
-    }
-
-    private fun hideKeyboard() {
-        binding.searchView.clearFocus()
-        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
     }
 
     private fun observer() {
@@ -118,30 +91,22 @@ class PokemonsListFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                // Если это элемент состояния загрузки, занимаем 2 колонки
                 return if (position == pokemonAdapter.itemCount) 2 else 1
             }
         }
 
         binding.recyclerView.layoutManager = layoutManager
-        updateAdapter()
+        binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
+            footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
+        )
+    }
 
+    private fun closeSearchBtnListener() {
         val closeBtn = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         closeBtn.setOnClickListener {
             binding.searchView.setQuery("", false)
-            isEndOfPaginationNow = true
             hideKeyboard()
-        }
-        adapterLoadStateListener()
-    }
-
-    private fun updateAdapter() {
-        if (isSearching) {
-            binding.recyclerView.adapter = pokemonAdapter
-        } else {
-            binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
-                footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
-            )
+            isSearching = false
         }
     }
 
@@ -149,26 +114,59 @@ class PokemonsListFragment : Fragment() {
 
         pokemonAdapter.addLoadStateListener { loadState ->
             val isLoadingNow = loadState.refresh is LoadState.Loading
-            if (isLoadingNow && loadState.append is LoadState.Loading && !isEndOfPaginationNow) {
+
+            if (isLoadingNow && isSearching) {
+                binding.recyclerView.adapter = pokemonAdapter
                 binding.progressBarSpd.visibility = View.VISIBLE
-                isSearching = true
-                Log.i("MyTag", "isLoadingNow && loadState.append is LoadState.Loading")
-                updateAdapter()
+            } else if (isLoadingNow) {
+                binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
+                    footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
+                )
+                binding.progressBarSpd.visibility = View.GONE
             }
 
             if (loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached) {
-                Log.i("MyTag", "loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached")
-                isEndOfPaginationNow = true
+                binding.progressBarSpd.visibility = View.GONE
             }
 
-            if (isEndOfPaginationNow) {
-                Log.i("MyTag", "isEndOfPaginationNow")
+            if (loadState.refresh is LoadState.Error) {
                 binding.progressBarSpd.visibility = View.GONE
-                isSearching = false
-                isEndOfPaginationNow = false
-                updateAdapter()
+                Toast.makeText(requireContext(), getString(R.string.lost_data), Toast.LENGTH_SHORT).show()
+            }
+
+            // Если возникла ошибка при добавлении
+            if (loadState.append is LoadState.Error) {
+                val error = (loadState.append as LoadState.Error).error
+                Log.e("MyTag", "Error while appending: $error")
+                // Можно показать сообщение об ошибке
             }
         }
+
+    }
+
+    private fun initSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.searchPokemonList(it) }
+                isSearching = true
+                hideKeyboard()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { viewModel.searchPokemonList(it) }
+                isSearching = !newText.isNullOrBlank()
+                return true
+            }
+
+        })
+    }
+
+    private fun hideKeyboard() {
+        binding.searchView.clearFocus()
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
     }
 
     private fun navigateToDetail(pokemon: PokeEntryEntity, dominantColor: Int) {

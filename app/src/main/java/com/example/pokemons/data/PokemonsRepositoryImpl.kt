@@ -35,7 +35,15 @@ class PokemonsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPokemonInfo(name: String): PokeInfoEntity {
-        return mapper.dbInfoToInfoEntity(dao.getPokemon(name.lowercase()))
+        return try {
+            val pokemonFromDatabase = dao.getPokemon(name.lowercase())
+            mapper.dbInfoToInfoEntity(pokemonFromDatabase)
+        } catch (e: Exception) {
+            val pokemonFromNetwork = mapper.dtoInfoToInfoDb(apiService.getPokemonInfo(name.lowercase()))
+            mapper.dbInfoToInfoEntity(pokemonFromNetwork)
+        }
+
+
     }
 
     @OptIn(ExperimentalPagingApi::class)

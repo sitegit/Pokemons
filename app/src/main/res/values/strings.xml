@@ -15,4 +15,5 @@
     <string name="back">back</string>
     <string name="weight">weight</string>
     <string name="height">Height</string>
+    <string name="lost_data">Не удалось загрузить данные, проверьте подключение к интернету</string>
 </resources>

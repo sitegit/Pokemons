@@ -1,6 +1,5 @@
 package com.example.pokemons.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class PokeLoadStateAdapter(
                 binding.textViewError.text = loadState.error.localizedMessage
             }
 
-            Log.i("MyTag", loadState.endOfPaginationReached.toString())
             binding.progressbar.visible(loadState is LoadState.Loading)
             binding.buttonRetry.visible(loadState is LoadState.Error)
             binding.textViewError.visible(loadState is LoadState.Error)
