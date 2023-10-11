@@ -24,14 +24,8 @@ class PokeLoadStateAdapter(
         }
 
         fun bind(loadState: LoadState) {
-
-            if (loadState is LoadState.Error) {
-                binding.textViewError.text = loadState.error.localizedMessage
-            }
-
             binding.progressbar.visible(loadState is LoadState.Loading)
             binding.buttonRetry.visible(loadState is LoadState.Error)
-            binding.textViewError.visible(loadState is LoadState.Error)
         }
 
         private fun View.visible(isVisible: Boolean) {

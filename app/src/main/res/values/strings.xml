@@ -16,4 +16,5 @@
     <string name="weight">weight</string>
     <string name="height">Height</string>
     <string name="lost_data">Не удалось загрузить данные, проверьте подключение к интернету</string>
+    <string name="pokemon">pokemon</string>
 </resources>

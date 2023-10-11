@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.domain.PokeEntryEntity
@@ -96,6 +97,17 @@ class PokemonsListFragment : Fragment() {
         binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
             footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
         )
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val sensitivity = 0.002f
+                val newProgress = binding.motionLayout.progress + sensitivity * dy
+                binding.motionLayout.progress = newProgress.coerceIn(0f, 1f)
+            }
+        })
+
     }
 
     private fun closeSearchBtnListener() {
