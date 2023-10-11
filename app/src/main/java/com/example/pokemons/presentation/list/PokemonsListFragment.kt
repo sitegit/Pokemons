@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -18,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
-import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.domain.PokeEntryEntity
 import com.example.pokemons.presentation.ViewModelFactory
@@ -133,7 +131,7 @@ class PokemonsListFragment : Fragment() {
 
             if (loadState.refresh is LoadState.Error) {
                 binding.progressBarSpd.visibility = View.GONE
-                Toast.makeText(requireContext(), getString(R.string.lost_data), Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), getString(R.string.lost_data), Toast.LENGTH_SHORT).show()
                 //Log.e("MyTag", "loadState.refresh is LoadState.Error")
             }
 
