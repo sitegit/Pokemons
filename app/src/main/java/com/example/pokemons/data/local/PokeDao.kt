@@ -29,8 +29,8 @@ interface PokeDao {
         insertAll(launches)
     }
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAllInfo(pokeInfo: List<PokeInfoDb>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllInfo(pokeInfo: List<PokeInfoDb>)
 
     @Query("SELECT * FROM poke_info WHERE name = :name")
     suspend fun getPokemon(name: String): PokeInfoDb

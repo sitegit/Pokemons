@@ -34,9 +34,12 @@
 
         <TextView
             android:id="@+id/tv_pokemon_name"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="3dp"
             android:layout_marginBottom="60dp"
+            android:maxWidth="205dp"
             style="@style/TextViewPokemonDetailTitle"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pokemon_number"
@@ -44,7 +47,7 @@
 
         <TextView
             android:id="@+id/tv_pokemon_number"
-            android:layout_marginEnd="2dp"
+            android:layout_marginEnd="3dp"
             style="@style/TextViewPokemonDetailTitle"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_name"
             app:layout_constraintEnd_toStartOf="@+id/tv_pokemon_name"

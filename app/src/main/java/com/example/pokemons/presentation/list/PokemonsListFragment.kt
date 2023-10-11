@@ -2,7 +2,6 @@ package com.example.pokemons.presentation.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -118,26 +117,30 @@ class PokemonsListFragment : Fragment() {
             if (isLoadingNow && isSearching) {
                 binding.recyclerView.adapter = pokemonAdapter
                 binding.progressBarSpd.visibility = View.VISIBLE
+                //Log.i("MyTag", "isLoadingNow && isSearching")
             } else if (isLoadingNow) {
                 binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
                     footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
                 )
                 binding.progressBarSpd.visibility = View.GONE
+                //Log.i("MyTag", "isLoadingNow")
             }
 
             if (loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached) {
                 binding.progressBarSpd.visibility = View.GONE
+                //Log.i("MyTag", "loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached")
             }
 
             if (loadState.refresh is LoadState.Error) {
                 binding.progressBarSpd.visibility = View.GONE
                 Toast.makeText(requireContext(), getString(R.string.lost_data), Toast.LENGTH_SHORT).show()
+                //Log.e("MyTag", "loadState.refresh is LoadState.Error")
             }
 
             // Если возникла ошибка при добавлении
             if (loadState.append is LoadState.Error) {
                 val error = (loadState.append as LoadState.Error).error
-                Log.e("MyTag", "Error while appending: $error")
+                //Log.e("MyTag", "Error while appending: $error")
                 // Можно показать сообщение об ошибке
             }
         }

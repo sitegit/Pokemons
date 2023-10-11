@@ -95,8 +95,7 @@ class PokemonDetailFragment : Fragment() {
                     tvTypeCenter.text = pokemon.types[0].type.name.replaceFirstChar()
                     tvTypeCenter.visibility = View.VISIBLE
                     tvTypeCenter.background = drawable
-                }
-                else {
+                } else {
                     tvTypeLeft.text = pokemon.types[0].type.name.replaceFirstChar()
                     tvTypeRight.text = pokemon.types[1].type.name.replaceFirstChar()
                     tvTypeLeft.visibility = View.VISIBLE
