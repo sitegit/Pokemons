@@ -40,8 +40,9 @@ class PokeRemoteMediator @Inject constructor(
 
             if (loadType == LoadType.REFRESH) { pokeDao.refresh(pokeEntries) }
 
+            val cleanedQuery = query?.replace("%", "") ?: ""
             val relevantPokeEntries = if (query.isNullOrBlank()) pokeEntries
-            else pokeEntries.filter { it.name.contains(query, ignoreCase = true) }
+            else pokeEntries.filter { it.name.contains(cleanedQuery, ignoreCase = true) }
 
             supervisorScope {
                 val detailedInfoJobs = relevantPokeEntries.map { poke ->

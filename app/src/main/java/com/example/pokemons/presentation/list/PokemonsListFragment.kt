@@ -16,7 +16,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.domain.PokeEntryEntity
@@ -70,6 +69,7 @@ class PokemonsListFragment : Fragment() {
         initSearchView()
         adapterLoadStateListener()
         closeSearchBtnListener()
+        appBarListener()
         observer()
     }
 
@@ -97,17 +97,13 @@ class PokemonsListFragment : Fragment() {
         binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
             footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
         )
+    }
 
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val sensitivity = 0.002f
-                val newProgress = binding.motionLayout.progress + sensitivity * dy
-                binding.motionLayout.progress = newProgress.coerceIn(0f, 1f)
-            }
-        })
-
+    private fun appBarListener() {
+        binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
+            binding.motionLayout.progress = seekPosition
+        }
     }
 
     private fun closeSearchBtnListener() {
@@ -143,16 +139,9 @@ class PokemonsListFragment : Fragment() {
 
             if (loadState.refresh is LoadState.Error) {
                 binding.progressBarSpd.visibility = View.GONE
-                //Toast.makeText(requireContext(), getString(R.string.lost_data), Toast.LENGTH_SHORT).show()
                 //Log.e("MyTag", "loadState.refresh is LoadState.Error")
             }
 
-            // Если возникла ошибка при добавлении
-            if (loadState.append is LoadState.Error) {
-                val error = (loadState.append as LoadState.Error).error
-                //Log.e("MyTag", "Error while appending: $error")
-                // Можно показать сообщение об ошибке
-            }
         }
 
     }

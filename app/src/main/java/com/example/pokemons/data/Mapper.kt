@@ -1,14 +1,9 @@
 package com.example.pokemons.data
 
-import android.util.Log
 import com.example.pokemons.data.model.PokeEntryDb
 import com.example.pokemons.data.model.PokeInfoDb
 import com.example.pokemons.data.model.PokeInfoDto
 import com.example.pokemons.data.model.PokemonsList
-import com.example.pokemons.data.model.Stat
-import com.example.pokemons.data.model.StatX
-import com.example.pokemons.data.model.Type
-import com.example.pokemons.data.model.TypeX
 import com.example.pokemons.domain.PokeEntryEntity
 import com.example.pokemons.domain.PokeInfoEntity
 import com.example.pokemons.util.Constants
@@ -50,26 +45,13 @@ class Mapper @Inject constructor() {
         types = pokeInfoDto.types
     )
 
-    fun dbInfoToInfoEntity(pokeInfoDb: PokeInfoDb?): PokeInfoEntity {
-        Log.i("MyTag", pokeInfoDb.toString())
-        return if (pokeInfoDb == null) {
-            PokeInfoEntity(
-                name = "",
-                number = -1,
-                weight = -1,
-                height = -1,
-                stats = List(6) { Stat(0, 0, StatX("")) },
-                types = List(1) { Type(0, TypeX("")) }
-            )
-        } else {
-            PokeInfoEntity(
-                name = (pokeInfoDb.name).replaceFirstChar(),
-                number = pokeInfoDb.number,
-                weight = pokeInfoDb.weight,
-                height = pokeInfoDb.height,
-                stats = pokeInfoDb.stats,
-                types = pokeInfoDb.types
-            )
-        }
-    }
+    fun dbInfoToInfoEntity(pokeInfoDb: PokeInfoDb) = PokeInfoEntity(
+        name = (pokeInfoDb.name).replaceFirstChar(),
+        number = pokeInfoDb.number,
+        weight = pokeInfoDb.weight,
+        height = pokeInfoDb.height,
+        stats = pokeInfoDb.stats,
+        types = pokeInfoDb.types
+    )
+
 }

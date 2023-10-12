@@ -1,50 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/motion_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/motion_scene"
     tools:context=".presentation.list.PokemonsListFragment"
-    app:layout_collapseMode="pin"
-    app:layout_collapseParallaxMultiplier="1"
-    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+    tools:ignore="rtlHardcoded">
 
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_international_pok_mon_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/pokemon" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/red">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view"
-        app:iconifiedByDefault="false"
-        app:queryHint="@string/search"
-        app:searchIcon="@null"
-        app:queryBackground="@android:color/transparent"
-        android:background="@drawable/search_background"
-        android:theme="@style/Theme.Pokemons" />
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/motion_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:minHeight="?attr/actionBarSize"
+            app:layoutDescription="@xml/motion_scene"
+            app:layout_collapseMode="pin"
+            app:layout_collapseParallaxMultiplier="1"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/pokemon"
+                android:src="@drawable/ic_international_pok_mon_logo"
+                tools:ignore="ImageContrastCheck"
+                tools:layout_editor_absoluteY="50dp" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_view"
+                app:iconifiedByDefault="false"
+                app:queryHint="@string/search"
+                app:searchIcon="@null"
+                app:queryBackground="@android:color/transparent"
+                android:background="@drawable/search_background"
+                android:theme="@style/Theme.Pokemons" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/collapsed_top_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="?attr/actionBarSize" />
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/pokemon_item" />
 
     <ProgressBar
@@ -52,10 +70,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view" />
-
-</androidx.constraintlayout.motion.widget.MotionLayout>
+        app:layout_anchor="@+id/recycler_view"
+        app:layout_anchorGravity="center" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

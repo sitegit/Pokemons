@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:motion="http://schemas.android.com/tools">
 
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@id/start">
 
+        <KeyFrameSet>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="1.0"
+                app:motionTarget="@id/search_view">
+            </KeyAttribute>
+
+            <KeyAttribute
+                app:framePosition="30"
+                android:alpha="0.0"
+                app:motionTarget="@id/search_view">
+            </KeyAttribute>
+
+        </KeyFrameSet>
+
     </Transition>
 
     <!-- Start position -->
     <ConstraintSet android:id="@+id/start">
+
         <Constraint
             android:id="@+id/image_view"
             android:layout_width="0dp"
@@ -25,9 +42,12 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_view" />
+            app:layout_constraintTop_toBottomOf="@+id/image_view"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </ConstraintSet>
 
     <!-- End position -->
@@ -35,19 +55,17 @@
         <Constraint
             android:id="@+id/image_view"
             android:layout_width="150dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/collapsed_top_guideline" />
         <Constraint
             android:id="@+id/search_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:alpha="0.0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/collapsed_top_guideline" />
+
     </ConstraintSet>
 
 </MotionScene>
