@@ -1,5 +1,6 @@
 package com.example.pokemons.presentation.list
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -17,11 +19,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
+import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
 import com.example.pokemons.domain.PokeEntryEntity
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.presentation.adapter.PokeLoadStateAdapter
 import com.example.pokemons.presentation.adapter.PokemonAdapter
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -67,9 +73,10 @@ class PokemonsListFragment : Fragment() {
 
         initRecyclerView()
         initSearchView()
+        appBarListener()
+        setDefaultColorStatusBar()
         adapterLoadStateListener()
         closeSearchBtnListener()
-        appBarListener()
         observer()
     }
 
@@ -100,10 +107,40 @@ class PokemonsListFragment : Fragment() {
     }
 
     private fun appBarListener() {
+        val maxRadius = resources.getDimension(R.dimen.max_corner_radius)
+        var currentRadius = maxRadius
+        setAppBarCornerRadius(binding.appBar, maxRadius)
+
         binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
             binding.motionLayout.progress = seekPosition
+
+            val desiredRadius = (1 - seekPosition) * maxRadius
+
+            if (currentRadius != desiredRadius) {
+                appbarAnimateCornerRadius(appBarLayout, currentRadius, desiredRadius)
+                currentRadius = desiredRadius
+            }
         }
+    }
+
+    private fun setAppBarCornerRadius(appBarLayout: AppBarLayout, radius: Float) {
+        val background = appBarLayout.background as MaterialShapeDrawable
+        background.shapeAppearanceModel = background.shapeAppearanceModel
+            .toBuilder()
+            .setBottomLeftCorner(CornerFamily.ROUNDED, radius)
+            .setBottomRightCorner(CornerFamily.ROUNDED, radius)
+            .build()
+    }
+
+    private fun appbarAnimateCornerRadius(appBarLayout: AppBarLayout, fromRadius: Float, toRadius: Float) {
+        val animator = ValueAnimator.ofFloat(fromRadius, toRadius)
+        animator.addUpdateListener { valueAnimator ->
+            val radius = valueAnimator.animatedValue as Float
+            setAppBarCornerRadius(appBarLayout, radius)
+        }
+        animator.duration = 150
+        animator.start()
     }
 
     private fun closeSearchBtnListener() {
@@ -176,6 +213,10 @@ class PokemonsListFragment : Fragment() {
             PokemonsListFragmentDirections
                 .actionPokemonsListFragmentToPokemonDetailFragment(pokemon, dominantColor)
         )
+    }
+
+    private fun setDefaultColorStatusBar() {
+        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.red)
     }
 
     override fun onDestroyView() {

@@ -5,12 +5,12 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -186,10 +186,9 @@ class PokemonDetailFragment : Fragment() {
     }
 
     private fun setDefaultColorStatusBar() {
-        val typedValue = TypedValue()
-        activity?.theme?.resolveAttribute(android.R.attr.statusBarColor, typedValue, true)
-        activity?.window?.statusBarColor = typedValue.data
+        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.red)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         setDefaultColorStatusBar()
