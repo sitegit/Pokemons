@@ -59,5 +59,10 @@
         <item name="android:layout_margin">10dp</item>
     </style>
 
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/red</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_color_selector</item>
+    </style>
+
 </resources>
 

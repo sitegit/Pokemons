@@ -27,4 +27,9 @@
             android:name="dominant_color"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/pokemonFavouriteFragment"
+        android:name="com.example.pokemons.presentation.favourite.PokemonFavouriteFragment"
+        android:label="fragment_pokemon_favourite"
+        tools:layout="@layout/fragment_pokemon_favourite" />
 </navigation>
