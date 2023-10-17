@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.pokemons.domain.GetPokemonsListUseCase
-import com.example.pokemons.domain.PokeEntryEntity
-import com.example.pokemons.domain.SearchPokemonUseCase
+import com.example.pokemons.domain.usecase.GetPokemonsListUseCase
+import com.example.pokemons.domain.entity.PokeEntryEntity
+import com.example.pokemons.domain.usecase.SearchPokemonUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,6 +1,8 @@
-package com.example.pokemons.domain
+package com.example.pokemons.domain.usecase
 
 import androidx.paging.PagingData
+import com.example.pokemons.domain.entity.PokeEntryEntity
+import com.example.pokemons.domain.PokemonsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

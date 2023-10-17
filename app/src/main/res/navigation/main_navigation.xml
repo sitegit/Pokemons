@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_pokemon_detail" >
         <argument
             android:name="pokemon"
-            app:argType="com.example.pokemons.domain.PokeEntryEntity" />
+            app:argType="com.example.pokemons.domain.entity.PokeEntryEntity" />
         <argument
             android:name="dominant_color"
             app:argType="integer" />
@@ -31,5 +31,10 @@
         android:id="@+id/pokemonFavouriteFragment"
         android:name="com.example.pokemons.presentation.favourite.PokemonFavouriteFragment"
         android:label="fragment_pokemon_favourite"
-        tools:layout="@layout/fragment_pokemon_favourite" />
+        tools:layout="@layout/fragment_pokemon_favourite" >
+        <action
+            android:id="@+id/action_pokemonFavouriteFragment_to_pokemonDetailFragment"
+            app:destination="@id/pokemonDetailFragment"
+            app:popUpTo="@id/pokemonFavouriteFragment" />
+    </fragment>
 </navigation>

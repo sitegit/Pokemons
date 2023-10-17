@@ -17,4 +17,6 @@
     <string name="height">Height</string>
     <string name="lost_data">Не удалось загрузить данные, проверьте подключение к интернету</string>
     <string name="pokemon">pokemon</string>
+    <string name="added_to_favorites">%1$s added to favorites</string>
+    <string name="removed_from_favorites">%1$s removed from favorites</string>
 </resources>

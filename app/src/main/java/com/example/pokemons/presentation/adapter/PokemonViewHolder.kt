@@ -12,7 +12,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.pokemons.R
 import com.example.pokemons.databinding.PokemonItemBinding
-import com.example.pokemons.domain.PokeEntryEntity
+import com.example.pokemons.domain.entity.PokeEntryEntity
 
 class PokemonViewHolder(
     private val binding: PokemonItemBinding,
@@ -60,7 +60,7 @@ class PokemonViewHolder(
                 }
             })
             .placeholder(R.mipmap.ic_launcher)
-            .error(R.drawable.baseline_mood_bad_24)
+            .error(R.drawable.ic_none_image)
             .into(imageView)
     }
 

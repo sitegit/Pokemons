@@ -10,10 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -21,14 +22,14 @@ import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonDetailBinding
 import com.example.pokemons.databinding.PokemonStatsBinding
-import com.example.pokemons.domain.PokeInfoEntity
+import com.example.pokemons.domain.entity.PokeEntryEntity
+import com.example.pokemons.domain.entity.PokeInfoEntity
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.util.Constants.COUNTER_OFFSET
 import com.example.pokemons.util.Constants.COUNTER_SMALL_PROGRESS_OFFSET
 import com.example.pokemons.util.Constants.COUNTER_THRESHOLD
 import com.example.pokemons.util.replaceFirstChar
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,6 +55,8 @@ class PokemonDetailFragment : Fragment() {
         get() = _statsBinding ?: throw RuntimeException("PokemonStatsBinding == null")
 
     private val args by navArgs<PokemonDetailFragmentArgs>()
+    private lateinit var pokemon: PokeInfoEntity
+    private var pokeFavourite: PokeEntryEntity? = null
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -71,43 +74,90 @@ class PokemonDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        displayTextInfo()
+        setPokemon()
         setDominantColors(args.dominantColor)
         Glide.with(view).load(args.pokemon.url).into(binding.ivPokemonImg)
-
+        onClickChangeFavourite()
         binding.buttonBack.setOnClickListener {
             findNavController().navigateUp()
         }
     }
 
-    private fun displayTextInfo() {
-        viewModel.viewModelScope.launch(Dispatchers.Main) {
-            with(binding) {
-                val pokemon = viewModel.getPokemonInfo(args.pokemon.name)
-                val drawable = getDrawableTv(args.dominantColor)
-                tvPokemonNumber.text = getString(R.string.prefix, args.pokemon.number.toString())
-                tvPokemonName.text = pokemon.name
-                tvHeight.text = pokemon.height.toString()
-                tvWeight.text = pokemon.weight.toString()
+    private fun setPokemon() {
+        lifecycleScope.launch {
+            pokemon = viewModel.getPokemonInfo(args.pokemon.name)
+            displayTextInfo(pokemon)
+        }
+    }
 
-                if (pokemon.types.size == 1) {
-                    tvTypeCenter.text = pokemon.types[0].type.name.replaceFirstChar()
-                    tvTypeCenter.visibility = View.VISIBLE
-                    tvTypeCenter.background = drawable
-                } else {
-                    tvTypeLeft.text = pokemon.types[0].type.name.replaceFirstChar()
-                    tvTypeRight.text = pokemon.types[1].type.name.replaceFirstChar()
-                    tvTypeLeft.visibility = View.VISIBLE
-                    tvTypeRight.visibility = View.VISIBLE
-                    tvTypeLeft.background = drawable
-                    tvTypeRight.background = drawable
-                }
+    private fun onClickChangeFavourite() {
+        viewModel.getFavouritePokemonByName(args.pokemon.name)
 
-                getStat(pokemon)
+        viewModel.favouritePokemon.observe(viewLifecycleOwner) {
+            pokeFavourite = it
+            updateBookmark(pokeFavourite != null)
+        }
+        favouritePokemonListener()
+    }
+
+    private fun favouritePokemonListener() {
+        binding.bookmark.setOnClickListener {
+
+            val isFavourite = pokeFavourite == null
+            val pokemon = PokeEntryEntity(args.pokemon.number, args.pokemon.name, args.pokemon.url)
+            pokeFavourite = if (isFavourite) {
+                viewModel.addPokemonToFavourite(pokemon)
+                pokemon
+            } else {
+                viewModel.deletePokemonFromFavourite(pokemon)
+                null
             }
 
+            updateBookmark(isFavourite)
+            showToast(isFavourite)
         }
+    }
+
+
+    private fun showToast(isChecked: Boolean) {
+        val message = if (isChecked)
+            getString(R.string.added_to_favorites, args.pokemon.name)
+        else
+            getString(R.string.removed_from_favorites, args.pokemon.name)
+
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateBookmark(isChecked: Boolean) {
+        val color = if (isChecked) R.color.yellow else R.color.grey
+
+        binding.bookmark.backgroundTintList =
+            ContextCompat.getColorStateList(requireContext(), color)
+    }
+
+    private fun displayTextInfo(poke: PokeInfoEntity) {
+        with(binding) {
+            val drawable = getDrawableTv(args.dominantColor)
+            tvPokemonNumber.text = getString(R.string.prefix, args.pokemon.number.toString())
+            tvPokemonName.text = poke.name
+            tvHeight.text = poke.height.toString()
+            tvWeight.text = poke.weight.toString()
+
+            if (poke.types.size == 1) {
+                tvTypeCenter.text = poke.types[0].type.name.replaceFirstChar()
+                tvTypeCenter.visibility = View.VISIBLE
+                tvTypeCenter.background = drawable
+            } else {
+                tvTypeLeft.text = poke.types[0].type.name.replaceFirstChar()
+                tvTypeRight.text = poke.types[1].type.name.replaceFirstChar()
+                tvTypeLeft.visibility = View.VISIBLE
+                tvTypeRight.visibility = View.VISIBLE
+                tvTypeLeft.background = drawable
+                tvTypeRight.background = drawable
+            }
+            getStat(poke)
+        }
+
     }
 
     private fun getDrawableTv(color: Int): Drawable {
@@ -145,11 +195,15 @@ class PokemonDetailFragment : Fragment() {
             setCounterPosition(progressBar.progress, progressBar, counter)
         }
 
-        animateProgress(0, specs, progressBar, counter)
+        animateProgress(specs, progressBar, counter)
     }
 
-    private fun animateProgress(start: Int, end: Int, progressBar: LinearProgressIndicator, counter: TextView) {
-        ValueAnimator.ofInt(start, end).apply {
+    private fun animateProgress(
+        specs: Int,
+        progressBar: LinearProgressIndicator,
+        counter: TextView
+    ) {
+        ValueAnimator.ofInt(0, specs).apply {
             duration = 700
             interpolator = AccelerateInterpolator()
             addUpdateListener { animation ->
@@ -163,7 +217,11 @@ class PokemonDetailFragment : Fragment() {
         }
     }
 
-    private fun setCounterPosition(progress: Int, progressBar: LinearProgressIndicator, counter: TextView) {
+    private fun setCounterPosition(
+        progress: Int,
+        progressBar: LinearProgressIndicator,
+        counter: TextView
+    ) {
         val progressRatio = progress.toFloat() / progressBar.max
         val progressBarWidth = progressBar.width - progressBar.paddingStart - progressBar.paddingEnd
         counter.visibility = View.VISIBLE

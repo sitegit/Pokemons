@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import com.example.pokemons.databinding.PokemonItemBinding
-import com.example.pokemons.domain.PokeEntryEntity
+import com.example.pokemons.domain.entity.PokeEntryEntity
 
 class PokemonAdapter(
     private val navigate: (PokeEntryEntity, Int) -> Unit

@@ -1,7 +1,7 @@
 package com.example.pokemons.presentation.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.pokemons.domain.PokeEntryEntity
+import com.example.pokemons.domain.entity.PokeEntryEntity
 
 object PokemonDiffCallBack : DiffUtil.ItemCallback<PokeEntryEntity>() {
     override fun areItemsTheSame(oldItem: PokeEntryEntity, newItem: PokeEntryEntity): Boolean {

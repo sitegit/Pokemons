@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokemons.PokemonsApplication
 import com.example.pokemons.R
 import com.example.pokemons.databinding.FragmentPokemonsListBinding
-import com.example.pokemons.domain.PokeEntryEntity
+import com.example.pokemons.domain.entity.PokeEntryEntity
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.presentation.adapter.PokeLoadStateAdapter
 import com.example.pokemons.presentation.adapter.PokemonAdapter
@@ -160,25 +160,20 @@ class PokemonsListFragment : Fragment() {
             if (isLoadingNow && isSearching) {
                 binding.recyclerView.adapter = pokemonAdapter
                 binding.progressBarSpd.visibility = View.VISIBLE
-                //Log.i("MyTag", "isLoadingNow && isSearching")
             } else if (isLoadingNow) {
                 binding.recyclerView.adapter = pokemonAdapter.withLoadStateFooter(
                     footer = PokeLoadStateAdapter { pokemonAdapter.retry() }
                 )
                 binding.progressBarSpd.visibility = View.GONE
-                //Log.i("MyTag", "isLoadingNow")
             }
 
             if (loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached) {
                 binding.progressBarSpd.visibility = View.GONE
-                //Log.i("MyTag", "loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached")
             }
 
             if (loadState.refresh is LoadState.Error) {
                 binding.progressBarSpd.visibility = View.GONE
-                //Log.e("MyTag", "loadState.refresh is LoadState.Error")
             }
-
         }
 
     }

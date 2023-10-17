@@ -18,6 +18,17 @@
         app:layout_constraintTop_toTopOf="@+id/inner_constraint_layout"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <ImageButton
+        android:id="@+id/bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="1dp"
+        android:background="@drawable/ic_bookmark"
+        app:layout_constraintEnd_toEndOf="@+id/inner_constraint_layout"
+        app:layout_constraintTop_toTopOf="@+id/inner_constraint_layout" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inner_constraint_layout"
         style="@style/ConstraintCardStyle"
@@ -34,11 +45,11 @@
 
         <TextView
             android:id="@+id/tv_pokemon_name"
+            style="@style/TextViewPokemonDetailTitle"
             android:layout_marginStart="3dp"
             android:layout_marginBottom="60dp"
-            android:maxWidth="205dp"
-            style="@style/TextViewPokemonDetailTitle"
             android:ellipsize="end"
+            android:maxWidth="205dp"
             android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,8 +58,8 @@
 
         <TextView
             android:id="@+id/tv_pokemon_number"
-            android:layout_marginEnd="3dp"
             style="@style/TextViewPokemonDetailTitle"
+            android:layout_marginEnd="3dp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_name"
             app:layout_constraintEnd_toStartOf="@+id/tv_pokemon_name"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -58,9 +69,9 @@
         <TextView
             android:id="@+id/tv_type_center"
             style="@style/TextViewPokemonTypeLabel"
-            android:layout_marginBottom="10dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,8 +80,8 @@
         <TextView
             android:id="@+id/tv_type_right"
             style="@style/TextViewPokemonTypeLabel"
-            android:layout_marginEnd="30dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/line"
             app:layout_constraintTop_toTopOf="@+id/tv_type_left"
@@ -79,8 +90,8 @@
         <TextView
             android:id="@+id/tv_type_left"
             style="@style/TextViewPokemonTypeLabel"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toStartOf="@+id/line"
@@ -103,8 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="@string/base_stats"
-            android:textSize="20sp"
             android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tv_hp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,13 +128,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:contentDescription="@string/weight"
             android:src="@drawable/ic_weight"
             app:layout_constraintBottom_toTopOf="@+id/tv_weight"
             app:layout_constraintEnd_toStartOf="@+id/line"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/line"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:contentDescription="@string/weight" />
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/tv_weight"
@@ -142,13 +153,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:contentDescription="@string/height"
             android:src="@drawable/ic_height"
             app:layout_constraintBottom_toTopOf="@+id/tv_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/line"
             app:layout_constraintTop_toTopOf="@+id/line"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:contentDescription="@string/height" />
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/tv_height"
@@ -162,8 +173,7 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_height"
             tools:text="2.0 m" />
 
-        <include
-            layout="@layout/pokemon_stats" />
+        <include layout="@layout/pokemon_stats" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

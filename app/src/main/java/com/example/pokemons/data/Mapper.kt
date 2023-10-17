@@ -1,11 +1,12 @@
 package com.example.pokemons.data
 
 import com.example.pokemons.data.model.PokeEntryDb
+import com.example.pokemons.data.model.PokeFavouriteDb
 import com.example.pokemons.data.model.PokeInfoDb
 import com.example.pokemons.data.model.PokeInfoDto
 import com.example.pokemons.data.model.PokemonsList
-import com.example.pokemons.domain.PokeEntryEntity
-import com.example.pokemons.domain.PokeInfoEntity
+import com.example.pokemons.domain.entity.PokeEntryEntity
+import com.example.pokemons.domain.entity.PokeInfoEntity
 import com.example.pokemons.util.Constants
 import com.example.pokemons.util.replaceFirstChar
 import javax.inject.Inject
@@ -54,4 +55,19 @@ class Mapper @Inject constructor() {
         types = pokeInfoDb.types
     )
 
+    fun pokeFavouriteDbToEntryEntity(pokeFavouriteDb: PokeFavouriteDb) = PokeEntryEntity(
+        number = pokeFavouriteDb.number,
+        name = pokeFavouriteDb.name,
+        url = pokeFavouriteDb.imageUrl
+    )
+
+    fun listPokeFavouriteDbToPokeEntryEntity(list: List<PokeFavouriteDb>) = list.map {
+        pokeFavouriteDbToEntryEntity(it)
+    }
+
+    fun pokeEntryEntityToFavouriteDb(pokeEntryEntity: PokeEntryEntity) = PokeFavouriteDb(
+        number = pokeEntryEntity.number,
+        name = pokeEntryEntity.name,
+        imageUrl = pokeEntryEntity.url
+    )
 }

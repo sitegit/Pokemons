@@ -1,4 +1,4 @@
-package com.example.pokemons.domain
+package com.example.pokemons.domain.entity
 
 import com.example.pokemons.data.model.Stat
 import com.example.pokemons.data.model.Type

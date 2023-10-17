@@ -6,9 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.pokemons.data.model.PokeEntryDb
+import com.example.pokemons.data.model.PokeFavouriteDb
 import com.example.pokemons.data.model.PokeInfoDb
 
-@Database(entities = [PokeEntryDb::class, PokeInfoDb::class], version = 31, exportSchema = false)
+@Database(entities = [PokeEntryDb::class, PokeInfoDb::class, PokeFavouriteDb::class], version = 38, exportSchema = false)
 @TypeConverters(PokeTypeConverter::class)
 abstract class PokeDatabase : RoomDatabase() {
     companion object {
