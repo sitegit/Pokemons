@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +28,6 @@ class NetworkConnectivityObserver @Inject constructor(
             if (getCurrentNetworkStatus() == ConnectivityObserver.Status.Unavailable) {
                 send(ConnectivityObserver.Status.Unavailable)
                 isLost = true
-                Log.i("MyTag", "CurrentNetworkStatus()")
             }
 
             val callback = object : ConnectivityManager.NetworkCallback() {
@@ -37,7 +35,6 @@ class NetworkConnectivityObserver @Inject constructor(
                     super.onAvailable(network)
                     launch {
                         if (isLost) {
-                            Log.i("MyTag", "onAvailable")
                             send(ConnectivityObserver.Status.Available)
                             isLost = false
                         }
@@ -46,13 +43,11 @@ class NetworkConnectivityObserver @Inject constructor(
 
                 override fun onLosing(network: Network, maxMsToLive: Int) {
                     super.onLosing(network, maxMsToLive)
-                    Log.i("MyTag", "onLosing")
                     launch { send(ConnectivityObserver.Status.Losing) }
                 }
 
                 override fun onLost(network: Network) {
                     super.onLost(network)
-                    Log.i("MyTag", "onLost")
                     launch {
                         delay(1000)
                         if (getCurrentNetworkStatus() != ConnectivityObserver.Status.Available) {
@@ -64,7 +59,6 @@ class NetworkConnectivityObserver @Inject constructor(
 
                 override fun onUnavailable() {
                     super.onUnavailable()
-                    Log.i("MyTag", "onUnavailable()")
                     launch { send(ConnectivityObserver.Status.Unavailable) }
                 }
             }

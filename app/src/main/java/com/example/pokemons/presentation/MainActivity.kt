@@ -29,13 +29,15 @@ class MainActivity : AppCompatActivity() {
         (this.application as PokemonsApplication).component
     }
 
+    private var snackBar: Snackbar? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        setupBottomMenu()
         observer()
+        setupBottomMenu()
     }
 
     private fun setupBottomMenu() {
@@ -44,8 +46,14 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.pokemonDetailFragment -> binding.bottomNavView.visibility = View.GONE
-                else -> binding.bottomNavView.visibility = View.VISIBLE
+                R.id.pokemonDetailFragment -> {
+                    binding.bottomNavView.visibility = View.GONE
+                    snackBar?.dismiss()
+                }
+                else -> {
+                    binding.bottomNavView.visibility = View.VISIBLE
+                    snackBar?.show()
+                }
             }
         }
         binding.bottomNavView.setupWithNavController(navController)
@@ -53,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun observer() {
+
         lifecycleScope.launch {
             networkConnectivityObserver.observe().collect { status ->
                 val length = when (status) {
@@ -61,17 +70,21 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 showSnackbar(status.toString(), length)
+                if (status == ConnectivityObserver.Status.Available) snackBar = null
             }
         }
     }
 
-    private fun showSnackbar(message: String, length: Int) {
+    private fun showSnackbar(status: String, length: Int) {
         val color = if (length == Snackbar.LENGTH_SHORT) R.color.green else R.color.red
-        val snackBar = Snackbar.make(binding.mainContainer, "Network status: $message", length)
-            .setAnchorView(binding.bottomNavView)
+        snackBar = Snackbar.make(binding.mainContainer, "Network status: $status", length)
             .setTextColor(ContextCompat.getColor(this, color))
+            .setAnchorView(binding.bottomNavView)
 
-        snackBar.animationMode = Snackbar.ANIMATION_MODE_SLIDE
-        snackBar.show()
+        snackBar?.let {
+            it.animationMode = Snackbar.ANIMATION_MODE_SLIDE
+            it.show()
+        }
+
     }
 }

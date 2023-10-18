@@ -30,6 +30,7 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 class PokemonsListFragment : Fragment() {
 
@@ -109,12 +110,16 @@ class PokemonsListFragment : Fragment() {
     private fun appBarListener() {
         val maxRadius = resources.getDimension(R.dimen.max_corner_radius)
         var currentRadius = maxRadius
+        val isExpanded = viewModel.appBarVerticalOffset == 0
+
         setAppBarCornerRadius(binding.appBar, maxRadius)
+        binding.appBar.setExpanded(isExpanded, false)
 
         binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+
             val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
             binding.motionLayout.progress = seekPosition
-
+            viewModel.appBarVerticalOffset = verticalOffset
             val desiredRadius = (1 - seekPosition) * maxRadius
 
             if (currentRadius != desiredRadius) {
@@ -131,15 +136,16 @@ class PokemonsListFragment : Fragment() {
             .setBottomLeftCorner(CornerFamily.ROUNDED, radius)
             .setBottomRightCorner(CornerFamily.ROUNDED, radius)
             .build()
+
     }
 
     private fun appbarAnimateCornerRadius(appBarLayout: AppBarLayout, fromRadius: Float, toRadius: Float) {
         val animator = ValueAnimator.ofFloat(fromRadius, toRadius)
         animator.addUpdateListener { valueAnimator ->
-            val radius = valueAnimator.animatedValue as Float
+            val isClosed = abs(viewModel.appBarVerticalOffset) == binding.appBar.totalScrollRange
+            val radius = if (isClosed) 0f else valueAnimator.animatedValue as Float
             setAppBarCornerRadius(appBarLayout, radius)
         }
-        animator.duration = 150
         animator.start()
     }
 
@@ -204,6 +210,7 @@ class PokemonsListFragment : Fragment() {
     }
 
     private fun navigateToDetail(pokemon: PokeEntryEntity, dominantColor: Int) {
+
         findNavController().navigate(
             PokemonsListFragmentDirections
                 .actionPokemonsListFragmentToPokemonDetailFragment(pokemon, dominantColor)

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.pokemons.domain.usecase.GetPokemonsListUseCase
 import com.example.pokemons.domain.entity.PokeEntryEntity
+import com.example.pokemons.domain.usecase.GetPokemonsListUseCase
 import com.example.pokemons.domain.usecase.SearchPokemonUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +18,8 @@ class PokemonsListViewModel @Inject constructor(
     private val getPokemonsListUseCase: GetPokemonsListUseCase,
     private val searchPokemonUseCase: SearchPokemonUseCase
 ) : ViewModel() {
+
+    var appBarVerticalOffset = 0
 
     private val searchQuery = MutableStateFlow("")
 
