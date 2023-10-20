@@ -9,7 +9,7 @@ import com.example.pokemons.data.model.PokeEntryDb
 import com.example.pokemons.data.model.PokeFavouriteDb
 import com.example.pokemons.data.model.PokeInfoDb
 
-@Database(entities = [PokeEntryDb::class, PokeInfoDb::class, PokeFavouriteDb::class], version = 38, exportSchema = false)
+@Database(entities = [PokeEntryDb::class, PokeInfoDb::class, PokeFavouriteDb::class], version = 39, exportSchema = false)
 @TypeConverters(PokeTypeConverter::class)
 abstract class PokeDatabase : RoomDatabase() {
     companion object {

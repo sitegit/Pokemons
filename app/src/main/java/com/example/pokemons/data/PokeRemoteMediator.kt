@@ -1,6 +1,5 @@
 package com.example.pokemons.data
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -39,7 +38,6 @@ class PokeRemoteMediator @Inject constructor(
             val pokeEntries = mapper.pokeListToPokeListEntryDb(response)
 
             if (loadType == LoadType.REFRESH) { pokeDao.refresh(pokeEntries) }
-
             val cleanedQuery = query?.replace("%", "") ?: ""
             val relevantPokeEntries = if (query.isNullOrBlank()) pokeEntries
             else pokeEntries.filter { it.name.contains(cleanedQuery, ignoreCase = true) }
@@ -51,14 +49,13 @@ class PokeRemoteMediator @Inject constructor(
                         mapper.dtoInfoToInfoDb(pokemon)
                     }
                 }
-                val detailedInfos = detailedInfoJobs.awaitAll()
-                pokeDao.insertAllInfo(detailedInfos)
+                val detailedInfo = detailedInfoJobs.awaitAll()
+                pokeDao.insertAllInfo(detailedInfo)
                 pokeDao.insertAll(pokeEntries)
             }
 
             MediatorResult.Success(endOfPaginationReached = pokeEntries.size < limit)
         } catch (e: Exception) {
-            Log.e("PokeRemoteMediator", "Error occurred: ${e.message}", e)
             MediatorResult.Error(e)
         }
     }

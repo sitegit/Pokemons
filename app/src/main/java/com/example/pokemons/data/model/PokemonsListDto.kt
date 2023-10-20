@@ -1,8 +1,8 @@
 package com.example.pokemons.data.model
 
-data class PokemonsList(
+data class PokemonsListDto(
     val count: Int,
     val next: String,
     val previous: Any,
-    val results: List<PokeEntryDb>
+    val results: List<PokeEntryDto>
 )

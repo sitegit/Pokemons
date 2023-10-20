@@ -4,16 +4,22 @@ import com.example.pokemons.data.model.PokeEntryDb
 import com.example.pokemons.data.model.PokeFavouriteDb
 import com.example.pokemons.data.model.PokeInfoDb
 import com.example.pokemons.data.model.PokeInfoDto
-import com.example.pokemons.data.model.PokemonsList
+import com.example.pokemons.data.model.PokemonsListDto
+import com.example.pokemons.data.model.Stat
+import com.example.pokemons.data.model.Type
 import com.example.pokemons.domain.entity.PokeEntryEntity
 import com.example.pokemons.domain.entity.PokeInfoEntity
+import com.example.pokemons.domain.entity.StatEntity
+import com.example.pokemons.domain.entity.StatXEntity
+import com.example.pokemons.domain.entity.TypeEntity
+import com.example.pokemons.domain.entity.TypeXEntity
 import com.example.pokemons.util.Constants
 import com.example.pokemons.util.replaceFirstChar
 import javax.inject.Inject
 
 class Mapper @Inject constructor() {
 
-    fun pokeListToPokeListEntryDb(pokeList: PokemonsList): List<PokeEntryDb> {
+    fun pokeListToPokeListEntryDb(pokeList: PokemonsListDto): List<PokeEntryDb> {
         return pokeList.results.map { result ->
             val number = if (result.url.endsWith("/")) {
                 result.url.dropLast(1).takeLastWhile { it.isDigit() }
@@ -31,7 +37,7 @@ class Mapper @Inject constructor() {
         }
     }
 
-    fun dBEntryToEntryEntity(pokeEntryDb: PokeEntryDb) = PokeEntryEntity(
+    fun dbEntryToEntryEntity(pokeEntryDb: PokeEntryDb) = PokeEntryEntity(
         name = pokeEntryDb.name.replaceFirstChar(),
         url = pokeEntryDb.url,
         number = pokeEntryDb.id
@@ -51,9 +57,22 @@ class Mapper @Inject constructor() {
         number = pokeInfoDb.number,
         weight = pokeInfoDb.weight,
         height = pokeInfoDb.height,
-        stats = pokeInfoDb.stats,
-        types = pokeInfoDb.types
+        stats = pokeInfoDb.stats.map { statToStatEntity(it) },
+        types = pokeInfoDb.types.map { typeToTypeEntity(it) }
     )
+
+    private fun statToStatEntity(stat: Stat): StatEntity {
+        return StatEntity(
+            baseStat = stat.baseStat,
+            stat = StatXEntity(stat.stat.name)
+        )
+    }
+
+    private fun typeToTypeEntity(type: Type): TypeEntity {
+        return TypeEntity(
+            type = TypeXEntity(name = type.type.name)
+        )
+    }
 
     fun pokeFavouriteDbToEntryEntity(pokeFavouriteDb: PokeFavouriteDb) = PokeEntryEntity(
         number = pokeFavouriteDb.number,

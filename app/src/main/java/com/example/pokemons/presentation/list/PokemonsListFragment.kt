@@ -25,10 +25,14 @@ import com.example.pokemons.domain.entity.PokeEntryEntity
 import com.example.pokemons.presentation.ViewModelFactory
 import com.example.pokemons.presentation.adapter.PokeLoadStateAdapter
 import com.example.pokemons.presentation.adapter.PokemonAdapter
+import com.example.pokemons.util.ConnectivityObserver
+import com.example.pokemons.util.NetworkConnectivityObserver
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -36,6 +40,8 @@ class PokemonsListFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    lateinit var networkConnectivityObserver: NetworkConnectivityObserver
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[PokemonsListViewModel::class.java]
@@ -55,6 +61,7 @@ class PokemonsListFragment : Fragment() {
         }
 
     private var isSearching = false
+    private var isUnknownHostException = false
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -87,6 +94,23 @@ class PokemonsListFragment : Fragment() {
                 launch {
                     viewModel.pokemons.collect { pagingData ->
                         pokemonAdapter.submitData(pagingData)
+                    }
+                }
+
+                launch {
+                    networkConnectivityObserver.observe().collect { status ->
+                        val length = when (status) {
+                            ConnectivityObserver.Status.Available -> {
+                                if (isUnknownHostException) {
+                                    pokemonAdapter.retry()
+                                    isUnknownHostException = false
+                                }
+                                Snackbar.LENGTH_SHORT
+                            }
+                            else -> Snackbar.LENGTH_INDEFINITE
+                        }
+
+                        showSnackBar(status.toString(), length)
                     }
                 }
             }
@@ -178,6 +202,10 @@ class PokemonsListFragment : Fragment() {
             }
 
             if (loadState.refresh is LoadState.Error) {
+                val error = (loadState.refresh as LoadState.Error).error
+                if (error is UnknownHostException) {
+                    isUnknownHostException = true
+                }
                 binding.progressBarSpd.visibility = View.GONE
             }
         }
@@ -215,6 +243,15 @@ class PokemonsListFragment : Fragment() {
             PokemonsListFragmentDirections
                 .actionPokemonsListFragmentToPokemonDetailFragment(pokemon, dominantColor)
         )
+    }
+
+    private fun showSnackBar(status: String, length: Int) {
+        val color = if (length == Snackbar.LENGTH_SHORT) R.color.green else R.color.red
+        val snackBar = Snackbar.make(binding.recyclerView, "Network status: $status", length)
+            .setTextColor(ContextCompat.getColor(requireContext(), color))
+
+        snackBar.animationMode = Snackbar.ANIMATION_MODE_SLIDE
+        snackBar.show()
     }
 
     private fun setDefaultColorStatusBar() {

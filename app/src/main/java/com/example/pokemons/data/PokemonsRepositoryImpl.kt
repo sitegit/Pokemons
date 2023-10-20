@@ -1,7 +1,5 @@
 package com.example.pokemons.data
 
-
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.paging.ExperimentalPagingApi
@@ -80,7 +78,9 @@ class PokemonsRepositoryImpl @Inject constructor(
         ) {
             daoFunction.invoke()
         }.flow.map { pagingData ->
-            pagingData.map { mapper.dBEntryToEntryEntity(it) }
+            pagingData.map {
+                mapper.dbEntryToEntryEntity(it)
+            }
         }
     }
 }

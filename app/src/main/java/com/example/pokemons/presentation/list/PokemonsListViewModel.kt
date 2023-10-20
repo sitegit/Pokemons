@@ -19,9 +19,11 @@ class PokemonsListViewModel @Inject constructor(
     private val searchPokemonUseCase: SearchPokemonUseCase
 ) : ViewModel() {
 
+    private val searchQuery = MutableStateFlow("")
     var appBarVerticalOffset = 0
 
-    private val searchQuery = MutableStateFlow("")
+    //private val _networkStatus = MutableSharedFlow<ConnectivityObserver.Status>()
+    //val networkStatus: SharedFlow<ConnectivityObserver.Status> get() = _networkStatus
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val pokemons: Flow<PagingData<PokeEntryEntity>> = searchQuery
@@ -36,6 +38,14 @@ class PokemonsListViewModel @Inject constructor(
     fun searchPokemonList(query: String) {
         searchQuery.value = query
     }
+
+    /*private fun observeNetworkStatus() {
+        viewModelScope.launch {
+            networkConnectivityObserver.observe().collect { status ->
+                _networkStatus.emit(status)
+            }
+        }
+    }*/
 }
 
 

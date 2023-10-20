@@ -8,6 +8,5 @@ data class PokeEntryDb(
     @PrimaryKey
     val name: String,
     val id: Int,
-    val url: String,
-    val page: Int = 0,
+    val url: String
 )
