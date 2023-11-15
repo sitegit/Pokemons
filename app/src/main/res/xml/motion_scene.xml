@@ -6,22 +6,6 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@id/start">
-
-        <KeyFrameSet>
-            <KeyAttribute
-                app:framePosition="0"
-                android:alpha="1.0"
-                app:motionTarget="@id/search_view">
-            </KeyAttribute>
-
-            <KeyAttribute
-                app:framePosition="30"
-                android:alpha="0.0"
-                app:motionTarget="@id/search_view">
-            </KeyAttribute>
-
-        </KeyFrameSet>
-
     </Transition>
 
     <!-- Start position -->
@@ -54,16 +38,19 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/image_view"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
+            android:alpha="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/collapsed_top_guideline" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/collapsed_top_guideline"/>
         <Constraint
             android:id="@+id/search_view"
-            android:alpha="0.0"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/collapsed_top_guideline" />
 
     </ConstraintSet>

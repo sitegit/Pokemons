@@ -64,6 +64,8 @@
         android:layout_height="match_parent"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/pokemon_item" />
 
@@ -73,7 +75,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:layout_marginBottom="100dp"
         android:indeterminateTint="@color/red"
         app:layout_anchor="@+id/recycler_view"
-        app:layout_anchorGravity="center" />
+        app:layout_anchorGravity="bottom|center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

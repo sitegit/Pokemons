@@ -11,19 +11,19 @@ class PokemonAdapter(
 ) : PagingDataAdapter<PokeEntryEntity, PokemonViewHolder>(PokemonDiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        val binding = PokemonItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+        return PokemonViewHolder(
+            PokemonItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
+            navigate
         )
-        return PokemonViewHolder(binding, navigate)
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val item = getItem(position)
-        item?.let {
-            holder.bind(item)
-        }
+        item?.let { holder.bind(item) }
     }
 }
 

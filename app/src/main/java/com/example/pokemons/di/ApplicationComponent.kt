@@ -2,6 +2,9 @@ package com.example.pokemons.di
 
 import android.app.Application
 import com.example.pokemons.PokemonsApplication
+import com.example.pokemons.di.module.DataModule
+import com.example.pokemons.di.module.NetworkModule
+import com.example.pokemons.di.module.ViewModelModule
 import com.example.pokemons.presentation.MainActivity
 import com.example.pokemons.presentation.detail.PokemonDetailFragment
 import com.example.pokemons.presentation.favourite.PokemonFavouriteFragment

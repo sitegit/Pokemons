@@ -1,6 +1,7 @@
-package com.example.pokemons.di
+package com.example.pokemons.di.module
 
 import androidx.lifecycle.ViewModel
+import com.example.pokemons.di.ViewModelKey
 import com.example.pokemons.presentation.detail.PokemonDetailViewModel
 import com.example.pokemons.presentation.favourite.PokemonFavouriteViewModel
 import com.example.pokemons.presentation.list.PokemonsListViewModel
