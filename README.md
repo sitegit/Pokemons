@@ -34,7 +34,6 @@
 <table>
   <tr>
     <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/44a635b3-26a1-4ce4-9734-3fb36f3ed5b4" width="200" alt="Screenshot1"/></td>
-    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/df1313e8-7e97-4687-af49-c23e112715c6" width="200" alt="Screenshot5"/></td>
     <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/3aaea3c2-3c08-465c-9cbc-eec0bd9b4594" width="200" alt="Screenshot4"/></td>
   </tr>
   <tr>
