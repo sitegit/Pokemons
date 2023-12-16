@@ -41,6 +41,9 @@
     </tr>
     <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="410" alt="Screenshot6"/></td>
   </table>
+  <table align="center">
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="410" alt="Screenshot6"/></td>
+  </table>
 </p>
 
 
