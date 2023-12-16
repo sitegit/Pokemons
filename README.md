@@ -27,7 +27,6 @@
 
 - Время поиска по имени может быть увеличено, т.к. поиск в приложении осуществляется по всем страницам, предоставляемым API, в связи с тем что в самом API нет функции поиска по имени.
 - Реализация Clean Architecture выполнена с некоторыми упрощениями для удобства разработки.
-- Основа дизайна взята с канала Philipp Lackner
 
 ## Скриншоты
 
@@ -39,10 +38,9 @@
       <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/3aaea3c2-3c08-465c-9cbc-eec0bd9b4594" width="200" alt="Screenshot4"/></td>
       <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/fc183b1c-ce3c-445e-a6b1-cede920784d3" width="200" alt="Screenshot3"/></td>
     </tr>
-    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="410" alt="Screenshot6"/></td>
   </table>
   <table align="center">
-    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="410" alt="Screenshot6"/></td>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="600" alt="Screenshot6"/></td>
   </table>
 </p>
 
