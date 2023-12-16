@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/pokemonsListFragment">
+
+    <fragment
+        android:id="@+id/pokemonsListFragment"
+        android:name="com.example.pokemons.presentation.list.PokemonsListFragment"
+        android:label="fragment_pokemons_list"
+        tools:layout="@layout/fragment_pokemons_list" >
+        <action
+            android:id="@+id/action_pokemonsListFragment_to_pokemonDetailFragment"
+            app:destination="@id/pokemonDetailFragment"
+            app:popUpTo="@id/pokemonsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonDetailFragment"
+        android:name="com.example.pokemons.presentation.detail.PokemonDetailFragment"
+        android:label="fragment_pokemon_detail"
+        tools:layout="@layout/fragment_pokemon_detail" >
+        <argument
+            android:name="pokemon"
+            app:argType="com.example.pokemons.domain.entity.PokeEntryEntity" />
+        <argument
+            android:name="dominant_color"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonFavouriteFragment"
+        android:name="com.example.pokemons.presentation.favourite.PokemonFavouriteFragment"
+        android:label="fragment_pokemon_favourite"
+        tools:layout="@layout/fragment_pokemon_favourite" >
+        <action
+            android:id="@+id/action_pokemonFavouriteFragment_to_pokemonDetailFragment"
+            app:destination="@id/pokemonDetailFragment"
+            app:popUpTo="@id/pokemonFavouriteFragment" />
+    </fragment>
+</navigation>

@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Pokemons</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search</string>
+    <string name="tap_to_retry">Tap to retry</string>
+    <string name="base_stats">Base Stats:</string>
+    <string name="prefix">#%1$s</string>
+    <string name="hp">Hp</string>
+    <string name="attack">Atk</string>
+    <string name="defense">Def</string>
+    <string name="special_attack">SpAtk</string>
+    <string name="spdef">SpDef</string>
+    <string name="spd">Spd</string>
+    <string name="back">back</string>
+    <string name="weight">weight</string>
+    <string name="height">Height</string>
+    <string name="lost_data">Не удалось загрузить данные, проверьте подключение к интернету</string>
+    <string name="pokemon">pokemon</string>
+    <string name="added_to_favorites">%1$s added to favorites</string>
+    <string name="removed_from_favorites">%1$s removed from favorites</string>
+    <string name="favourite_pokemons">Favourite Pokemons</string>
 </resources>
