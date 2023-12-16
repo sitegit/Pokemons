@@ -31,5 +31,5 @@
 
 ## Скриншоты
 
-- ![Главный экран](screenshots/sd1.jpg)
+- ![Главный экран](screenshots/s1.jpg)
 
