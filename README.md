@@ -31,5 +31,4 @@
 
 ## Скриншоты
 
-- ![Главный экран](screenshots/s1.jpg)
-
+![Screenshot1](https://github.com/sitegit/Pokemons/assets/47815702/44a635b3-26a1-4ce4-9734-3fb36f3ed5b4)
