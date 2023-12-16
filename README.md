@@ -27,14 +27,21 @@
 
 - Время поиска по имени может быть увеличено, т.к. поиск в приложении осуществляется по всем страницам, предоставляемым API, в связи с тем что в самом API нет функции поиска по имени.
 - Реализация Clean Architecture выполнена с некоторыми упрощениями для удобства разработки.
-
+- Основа дизайна взята с канала Philipp Lackner
 
 ## Скриншоты
 
-![Screenshot1](https://github.com/sitegit/Pokemons/assets/47815702/44a635b3-26a1-4ce4-9734-3fb36f3ed5b4)
-![Screenshot5](https://github.com/sitegit/Pokemons/assets/47815702/df1313e8-7e97-4687-af49-c23e112715c6)
-![Screenshot4](https://github.com/sitegit/Pokemons/assets/47815702/3aaea3c2-3c08-465c-9cbc-eec0bd9b4594)
-![Screenshot2](https://github.com/sitegit/Pokemons/assets/47815702/2c939dda-fe88-4b8a-a3d7-86a3806e24dc)
-![Screenshot6](https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804)
-![Screenshot3](https://github.com/sitegit/Pokemons/assets/47815702/fc183b1c-ce3c-445e-a6b1-cede920784d3)
+<table>
+  <tr>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/44a635b3-26a1-4ce4-9734-3fb36f3ed5b4" width="200" alt="Screenshot1"/></td>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/df1313e8-7e97-4687-af49-c23e112715c6" width="200" alt="Screenshot5"/></td>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/3aaea3c2-3c08-465c-9cbc-eec0bd9b4594" width="200" alt="Screenshot4"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/2c939dda-fe88-4b8a-a3d7-86a3806e24dc" width="200" alt="Screenshot2"/></td>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="200" alt="Screenshot6"/></td>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/fc183b1c-ce3c-445e-a6b1-cede920784d3" width="200" alt="Screenshot3"/></td>
+  </tr>
+</table>
+
 
