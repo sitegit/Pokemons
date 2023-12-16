@@ -39,6 +39,14 @@
       <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/fc183b1c-ce3c-445e-a6b1-cede920784d3" width="200" alt="Screenshot3"/></td>
     </tr>
   </table>
+  <table align="center" cellspacing="10">
+    <tr>
+      <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/9b17788a-44bd-4f23-addb-325a568cb7a6" width="200" alt="Screenshot1"/></td>
+      <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/b70d19c6-4f4d-42aa-bc33-e64d2ee136fb" width="200" alt="Screenshot2"/></td>
+      <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/28302e71-f158-43bf-9bf0-e20db4b6b2c3" width="200" alt="Screenshot4"/></td>
+      <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/72e50775-6b4e-4a6a-a6a0-ebbd3fa1005c" width="200" alt="Screenshot3"/></td>
+    </tr>
+  </table>
   <table align="center">
     <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="600" alt="Screenshot6"/></td>
   </table>
