@@ -32,3 +32,9 @@
 ## Скриншоты
 
 ![Screenshot1](https://github.com/sitegit/Pokemons/assets/47815702/44a635b3-26a1-4ce4-9734-3fb36f3ed5b4)
+![Screenshot5](https://github.com/sitegit/Pokemons/assets/47815702/df1313e8-7e97-4687-af49-c23e112715c6)
+![Screenshot4](https://github.com/sitegit/Pokemons/assets/47815702/3aaea3c2-3c08-465c-9cbc-eec0bd9b4594)
+![Screenshot2](https://github.com/sitegit/Pokemons/assets/47815702/2c939dda-fe88-4b8a-a3d7-86a3806e24dc)
+![Screenshot6](https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804)
+![Screenshot3](https://github.com/sitegit/Pokemons/assets/47815702/fc183b1c-ce3c-445e-a6b1-cede920784d3)
+
