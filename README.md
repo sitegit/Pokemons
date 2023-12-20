@@ -47,7 +47,7 @@
     </tr>
   </table>
   <table align="center">
-    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="400" alt="Screenshot6"/></td>
+    <td><img src="https://github.com/sitegit/Pokemons/assets/47815702/284daf3b-6907-4caf-8eaa-c7648e268804" width="600" alt="Screenshot6"/></td>
     <td><video src="https://github.com/sitegit/Pokemons/assets/47815702/10ab9695-dc9d-4e98-92f4-3676f807730a" width="200" alt="Video"/></td>
   </table>
 </p>
