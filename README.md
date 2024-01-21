@@ -14,7 +14,7 @@
 - Kotlin
 - XML
 - Clean Architecture
-- MVVM (Model-View-ViewModel)
+- MVVM
 - Retrofit 2 для сетевых запросов
 - Room для локального хранения данных
 - Paging 3 с RemoteMediator для пагинации
