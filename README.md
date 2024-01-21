@@ -11,6 +11,8 @@
 
 ## Технологии
 
+- Kotlin
+- XML
 - Clean Architecture
 - MVVM (Model-View-ViewModel)
 - Retrofit 2 для сетевых запросов
